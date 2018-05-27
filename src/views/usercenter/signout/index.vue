@@ -1,0 +1,27 @@
+<style lang="less" scoped>
+    @import './index.less';
+</style>
+
+<template>
+    <div>
+        我是退出页面
+    </div>
+</template>
+
+<script>
+import Cookies from 'js-cookie';
+export default {
+    data () {
+        return {
+            
+        };
+    },
+    methods: {
+        
+    }
+};
+</script>
+
+<style>
+
+</style>

@@ -1,0 +1,69 @@
+.main{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    .uc-topNav{
+        height: 105px;
+        background: #058FFF;
+        line-height: 105px;
+        color: #fff;
+        overflow: hidden;
+        .logo{
+            width: 267px;
+            height: 105px;
+            font-size: 30px;
+            text-align: center;
+            float: left;
+        }
+        ul{
+            display: inline-block;
+            text-align: center;
+            height: 105px;
+            margin-left: 267px;
+            overflow: hidden;
+            display: flex;
+
+            li{
+                display: inline-block;
+                flex: 1;
+                a{
+                    width: 210px;
+                    display: inline-block;
+                    font-size: 30px;
+                    color: #daf1fe;
+                    &.signout{
+                        font-size: 24px;
+                        .icon4{
+                            background-image: url(../../images/nav-icon04.png);
+                            margin-right: 10px;
+                        }
+                    }
+                    &.router-link-active{
+                        background: #046CC1;
+                        color: #fff;
+                    }
+                    span{
+                        vertical-align: middle;
+                    }
+                    .nav-icon{
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 33px;
+                        height: 33px;
+                        margin-right: 20px;
+                        background: center center no-repeat  url(../../images/nav-icon01.png);
+                        &.icon1{
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .uc-page{
+        position: absolute;
+        width: 100%;
+        top: 105px;
+        bottom: 0;
+    }
+}
