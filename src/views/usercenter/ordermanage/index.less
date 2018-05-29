@@ -24,8 +24,16 @@
             line-height: 45px;
             display: flex;
             justify-content: space-between;
+            .ivu-date-picker{
+                font-size: 14px;
+            }
             &.n-b{
                 border-bottom: 0;
+                justify-content: flex-end;
+                .ivu-btn{
+                    width: 100px;
+                    margin-left: 70px;
+                }
             }
             .o-select{
                 border: 0;
@@ -64,7 +72,24 @@
             .th,.td{
                 display: table-cell;
                 font-size: 20px;
-                width: 10%;
+                width: 9.5%;
+                &:last-child{
+                    width: 15%;
+                }
+                &.toolbtn{
+                   span{
+                    width: 90px;
+                    line-height: 40px;
+                    background: #058fff;
+                    text-align: center;
+                    display: inline-block;
+                    font-size: 16px;
+                    border-radius: 100px;
+                    color: #fff;
+                    margin: 0 15px;
+                    cursor: pointer;
+                   }
+                }
             }
             .th{
                 background: #f4f6fa;

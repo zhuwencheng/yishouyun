@@ -1,27 +1,33 @@
 <style lang="less" scoped>
-    @import './index.less';
+@import "./index.less";
 </style>
 
 <template>
-    <div>
-        我是退出页面
+    <div class="signout">
+        sdfsdf
     </div>
+    
 </template>
 
 <script>
-import Cookies from 'js-cookie';
+// import Cookies from "js-cookie";
 export default {
-    data () {
-        return {
-            
-        };
-    },
-    methods: {
-        
-    }
+  components: {
+  },
+  data() {
+    return {
+      
+      //交易方式
+    };
+  },
+  methods: {
+    
+  },
+  mounted() {
+    
+  }
 };
 </script>
 
 <style>
-
 </style>

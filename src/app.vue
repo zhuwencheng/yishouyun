@@ -27,7 +27,7 @@
 html,body{
     width: 100%;
     height: 100%;
-    background: #f8f9fd;
+    background: #f8f9fd url(./images/loginBg.png) center center no-repeat;
     overflow: hidden;
 }
 .app-main{
