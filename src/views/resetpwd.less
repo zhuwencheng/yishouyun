@@ -1,29 +1,75 @@
-.login{
-    width: 100%;
-    height: 100%;
-    background-image: url('https://file.iviewui.com/iview-admin/login_bg.jpg');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    &-con{
-        position: absolute;
-        right: 160px;
-        top: 50%;
-        transform: translateY(-60%);
-        width: 300px;
-        &-header{
-            font-size: 16px;
-            font-weight: 300;
-            text-align: center;
-            padding: 30px 0;
+.app-main{
+    background: #000;
+}
+.resetpwd{
+    width: 510px;
+    background: #fff;
+    box-sizing: border-box;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.08);
+    transform: translate(-50%,-50%);
+    padding: 50px 60px 50px;
+    font-size: 16px;
+    color: #64656D;
+    .hd{
+        font-size: 30px;
+        color: #058FFF;
+        text-align: center; 
+        margin-bottom: 50px;
+    }
+    .reset-ivu-form-item{
+        margin-bottom: 0;
+    }
+    &::after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+    .o-link{
+        a{
+            color: #ACACAD;
         }
-        .form-con{
-            padding: 10px 0 0;
+    }
+    .xz-form-group{
+        display: flex;
+        border-bottom: 1px solid #058FFF;
+        margin-bottom: 50px;
+        line-height: 65px;
+        font-size: 16px;
+        justify-content:space-between;
+        .sendcode{
+            width: 6em;
+            text-align: right;
+            color: #058FFF;
+            cursor: pointer;
         }
-        .login-tip{
-            font-size: 10px;
+        label{
+            display: inline-block;
+            width: 6em;
+        }
+        input[type=text],input[type=password],input[type=number]{
+            outline: none;
+            border: 0;
+            color: #64656D;
+            margin-left: 20px;
+            flex: 1;
+        }
+    }
+    .submit{
+        margin-top: 80px;
+        .btn{
+            width: 100%;
             text-align: center;
-            color: #c3c3c3;
+            height: 60px;
+            line-height: 60px;
+            background: #058FFF;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 24px;
+            display: block;
+            cursor: pointer;
         }
     }
 }
