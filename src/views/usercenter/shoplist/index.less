@@ -123,3 +123,176 @@
         }
     }
 }
+.speccard{
+    padding: 20px 40px 0;
+    .hd{
+        text-align: center;
+        font-size: 28px;
+    }
+    .img{
+        padding: 30px 0;
+        text-align: center;
+        img{
+            width: 200px;
+            height: 200px;
+            border: 2px solid #068ffc;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+    }
+    label{
+        font-size: 16px;
+        display: inline-block;
+        width: 80px;
+        vertical-align: middle;
+    }
+    .choose-num{
+        line-height: 40px;
+        margin-bottom: 30px;
+        display: flex;
+    }
+    .remarks{
+        display: flex;
+        .remark-bd{
+            display: inline-block;
+            font-size: 0;
+            span{
+                line-height: 25px;
+                width: 53px;
+                display: inline-block;
+                font-size: 14px;
+                background: #fff;
+                color: #058fff;
+                border:1px solid #058fff;
+                border-radius: 100px;
+                text-align: center;
+                margin: 0 6px 20px;
+                cursor: pointer;
+                &.checked{
+                    background: #058fff;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+.scart{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    transition: all ease .2s;
+    .mask{
+        background: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .wrapper{
+        width: 500px;
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #fff;
+        border-left: 1px solid #058FFF;
+        &>.hd{
+            line-height: 90px;
+            text-align: center;
+            font-size: 30px;
+            color: #1e1e1e;
+            overflow: hidden;
+            em{
+                background: url(../../../images/shopcart-bj.png) no-repeat center center #fff;
+                display: inline-block;
+                vertical-align: middle;
+                width: 70px;
+                height: 70px;
+                margin-right: 25px;
+            }
+        }
+        .t-1{
+            width: 10%;
+        }
+        .t-2{
+            width: 20%;
+        }
+        .t-3{
+            width: 10%;
+        }
+        .t-4{
+            width: 30%;
+        }
+        .t-5{
+            width: 10%;
+        }
+        .t-6{
+            width: 20%;
+        }
+        &>.thw{
+            display: table;
+            line-height: 50px;
+            background: #058FFF;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            span{
+                display: table-cell;
+            }
+        }
+        .tdw{
+            display: table;
+            line-height: 60px;
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px dashed #D5D5DB;
+            .delete{
+                color: #058FFF;
+                font-size: 20px;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+            &>div{
+                display: table-cell;
+            }
+        }
+        &>.bd{
+            position: absolute;
+            width: 100%;
+            overflow-y: auto;
+            left: 0;
+            top: 140px;
+            bottom: 160px;
+            padding: 0 10px;
+        }
+        &>.f-tool{
+            position: absolute;
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            padding: 30px 20px;
+            dt{
+                float: right;
+                width: 120px;
+                height: 100%;
+                padding-top: 50px;
+            }
+            dd{
+                margin-right: 120px;
+                text-align: left;
+                line-height: 2em;
+                padding-left: 40px;
+                &.total-money{
+                    font-size: 32px;
+                    color: #FF514D;
+                }
+                &.total-num{
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
