@@ -26,10 +26,55 @@
                  </Scroll>
             </div>
         </div>
-           <Modal v-model="showShopCard" class="xz-model">
+        <!-- 商品配置弹窗 -->
+          <Modal v-model="showShopCard" class="xz-model">
               <SpecCard v-model="specCardData"></SpecCard>
               <div slot="footer">
                   <Button size="large" type="primary" long >确认</Button>
+              </div>
+          </Modal>
+          <!-- 订单详情配置 -->
+          <Modal v-model="showOrdermodel" class="xz-model bl-header">
+               <p slot="header" class="o-dhead">
+                  <span class="l-icon"></span>
+                  <span>奶茶小店 <em>（西直门凯德MAL店）</em></span>
+              </p>
+              <OrderDetail></OrderDetail>
+              <div slot="footer">
+                  <Button size="large" type="primary" long >确认</Button>
+              </div>
+          </Modal>
+          <!-- 订单确认页面 -->
+          <Modal v-model="showConfirmModel" class="xz-model" :closable="false">
+              <ConfirmOrder></ConfirmOrder>
+              <div slot="footer" class="btw-footer">
+                  <Button size="large" type="ghost">取消订单</Button>
+                  <Button size="large" type="primary">确认结账</Button>
+              </div>
+          </Modal>
+          <!-- 订单详情配置 -->
+          <Modal v-model="showPayType" class="xz-model bl-header">
+               <p slot="header" class="o-dhead">
+                  选择支付方式
+              </p>
+              <PayType></PayType>
+              <div slot="footer"></div>
+          </Modal>
+          <!-- 支付成功 -->
+          <Modal v-model="showPayResult" class="xz-model">
+              <PaySuc></PaySuc>
+              <div slot="footer">
+                <Button size="large" type="primary" long >确认并打印小票</Button>
+              </div>
+          </Modal>
+          <!-- 新增用户 -->
+          <Modal v-model="addUserModel" class="xz-model bl-header">
+               <p slot="header" class="o-dhead">
+                  新增/修改会员
+              </p>
+              <AddUser></AddUser>
+              <div slot="footer">
+                <Button size="large" type="primary" long >保存</Button>
               </div>
           </Modal>
     </div>
@@ -37,19 +82,34 @@
 </template>
 
 <script>
-import SpecCard from './specCard';
-import ShopCart from './shopcart';
+import SpecCard from './specCard';//商品配置弹窗
+import ShopCart from './shopcart';//购物车
+import OrderDetail from './orderDetail';//订单详情配置
+import ConfirmOrder from './confirmOrder';//订单详情配置
+import PayType from './payType';//订单详情配置
+import PaySuc from './paySuc';//订单详情配置
+import AddUser from '../../my-components/edit-user/index';//新增用户配置
 export default {
   components: {
     SpecCard,
-    ShopCart
+    ShopCart,
+    OrderDetail,
+    ConfirmOrder,
+    PayType,
+    PaySuc,
+    AddUser
   },
   data() {
     return {
       distance: -100,
       showShopCard:false,
-      scrollHeight:'100%',
       shopCartShow:false,
+      showOrdermodel:false,
+      showConfirmModel:false,
+      showPayType:false,
+      showPayResult:false,
+      addUserModel:true,
+      scrollHeight:'100%',
       menuList: [
         {
           title: "果茶系列",
@@ -161,5 +221,40 @@ export default {
 }
 .ivu-scroll-wrapper,.ivu-scroll-container{
   height: 100%;
+}
+.bl-header .ivu-modal-header{
+  background: #058fff;
+  color: #fff;
+  text-align: center;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 0;
+}
+.bl-header .ivu-modal-close .ivu-icon-ios-close-empty {
+    color: #fff;
+}
+.o-dhead{
+  font-size: 20px !important;
+  color: #fff !important;
+  line-height: 40px !important;
+  height: 40px !important;
+}
+.o-dhead em{
+  font-size:16px;
+}
+.bl-header .ivu-modal-close{
+  top: 18px;
+}
+.o-dhead .l-icon{
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  background: url(../../../images/nc-icon-f.png) no-repeat center center;
+  margin-right: 10px;
+  display: inline-block;
+}
+.btw-footer{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

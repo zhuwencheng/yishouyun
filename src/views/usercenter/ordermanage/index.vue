@@ -50,6 +50,59 @@
             <OTable :tabledata="tableData"></OTable>
             <Page :total="100" show-elevator class="page" :current="pageIndex" @on-change="changePage"></Page>
         </div>
+        <!-- 订单详情 -->
+        <Modal v-model="orderDetailModel" class="xz-model bl-header">
+            <p slot="header" class="o-dhead">
+              订单详情
+            </p>
+            <div class="orderDetail">
+              <table>
+                <tr>
+                  <td class="w30">交椅门店号</td>
+                  <td>13567890086755</td>
+                </tr>
+                <tr>
+                  <td class="w30">交易时间</td>
+                  <td>2018.4.22 16:32</td>
+                </tr>
+                <tr>
+                  <td class="w30">交易流水号</td>
+                  <td>12345678900</td>
+                </tr>
+                <tr>
+                  <td class="w30">会员手机号</td>
+                  <td>1243566879</td>
+                </tr>
+                <tr>
+                  <td class="w30">交易方式</td>
+                  <td>微信</td>
+                </tr>
+                <tr>
+                  <td class="w30">交易金额</td>
+                  <td>36.00</td>
+                </tr>
+                <tr>
+                  <td class="w30">交易状态</td>
+                  <td>成功</td>
+                </tr>
+                <tr>
+                  <td class="w30">已购商品</td>
+                  <td>招牌奶茶（冰）*2</td>
+                </tr>
+                <tr>
+                  <td class="w30">优惠详情</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="w30">备注</td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+            <div slot="footer">
+              <Button size="large" type="primary" long >保存</Button>
+            </div>
+        </Modal>
     </div>
     
 </template>
@@ -65,6 +118,7 @@ export default {
   },
   data() {
     return {
+      orderDetailModel:true,
       tableData: [
         {
           time: "2017-01-01 16:22",
@@ -144,4 +198,61 @@ export default {
 </script>
 
 <style>
+.xz-model .ivu-modal-footer{
+  border-top: 0;
+  font-style: 16px;
+  padding: 12px 58px 30px;
+} 
+.xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
+  color: #058FFF;
+}
+.xz-model .ivu-btn-large{
+  padding: 12px 15px 12px;
+  font-size: 16px;
+}
+.ivu-tooltip-inner{
+  color: #333;
+  background: #fff;
+}
+.ivu-tooltip-popper[x-placement^=bottom] .ivu-tooltip-arrow{
+  border-bottom-color: #ccc;
+}
+.ivu-scroll-wrapper,.ivu-scroll-container{
+  height: 100%;
+}
+.bl-header .ivu-modal-header{
+  background: #058fff;
+  color: #fff;
+  text-align: center;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 0;
+}
+.bl-header .ivu-modal-close .ivu-icon-ios-close-empty {
+    color: #fff;
+}
+.o-dhead{
+  font-size: 20px !important;
+  color: #fff !important;
+  line-height: 40px !important;
+  height: 40px !important;
+}
+.o-dhead em{
+  font-size:16px;
+}
+.bl-header .ivu-modal-close{
+  top: 18px;
+}
+.o-dhead .l-icon{
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  background: url(../../../images/nc-icon-f.png) no-repeat center center;
+  margin-right: 10px;
+  display: inline-block;
+}
+.btw-footer{
+  display: flex;
+  justify-content: space-between;
+}
 </style>

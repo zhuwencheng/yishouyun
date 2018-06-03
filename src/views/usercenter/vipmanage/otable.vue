@@ -20,7 +20,7 @@
             <div class="td">{{item.phone}}</div>
             <div class="td">{{item.type}}</div>
             <div class="td">{{item.price}}</div>
-            <div class="td toolbtn"><span>修改</span></div>
+            <div class="td toolbtn"><span @click="edit">修改</span></div>
         </div>
     </div>
     
@@ -33,7 +33,11 @@ export default {
     return {};
   },
   props: ["tabledata"],
-  methods: {},
+  methods: {
+      edit(){
+          this.$emit('edit');
+      }
+  },
   mounted(){
       console.log(this.tabledata)
   }

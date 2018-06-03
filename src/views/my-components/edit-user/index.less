@@ -1,0 +1,51 @@
+.edituser{
+    padding: 40px 40px 10px;
+    font-size: 16px;
+    .form-group{
+        line-height: 40px;
+        margin-bottom: 25px;
+        display: flex;
+        .fr{
+            border:0;
+            color: #058fff;
+        }
+        .icon{
+            width: 30px;
+            height: 40px;
+            vertical-align: middle;
+            background: center center no-repeat;
+            &.user-icon{
+                background-image: url(../../../images/user-icon.png);
+            }
+            &.phone-icon{
+                background-image: url(../../../images/phone-icon.png);
+            }
+            &.bir-icon{
+                background-image: url(../../../images/bir-icon.png);
+            }
+            &.grade-icon{
+                background-image: url(../../../images/grade-icon.png);
+            }
+        }
+        &>div{
+            flex: 1;
+            display: flex;
+            margin-left: 15px;
+            border-bottom: 1px solid #d5d5db;
+            justify-content: space-between;
+            input{
+                border:0;
+                outline: none;
+                flex: 1;
+                margin-left: 15px;
+            }
+            label{
+                width: 4em;
+                em{
+                    color: #d33535;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
