@@ -105,7 +105,8 @@
   color: #1e1e1e;
   cursor: pointer;
 }
-.shoplist .ct .bd .card.active {
+.shoplist .ct .bd .card.active,
+.shoplist .ct .bd .card:hover {
   border-color: #058fff;
 }
 .shoplist .ct .bd .card .price {
@@ -115,4 +116,460 @@
 .shoplist .ct .bd .card img {
   width: 250px;
   height: 250px;
+}
+.speccard {
+  padding: 20px 40px 0;
+}
+.speccard .hd {
+  text-align: center;
+  font-size: 28px;
+}
+.speccard .img {
+  padding: 30px 0;
+  text-align: center;
+}
+.speccard .img img {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #068ffc;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.speccard label {
+  font-size: 16px;
+  display: inline-block;
+  width: 80px;
+  vertical-align: middle;
+}
+.speccard .choose-num {
+  line-height: 40px;
+  margin-bottom: 30px;
+  display: flex;
+}
+.speccard .remarks {
+  display: flex;
+}
+.speccard .remarks .remark-bd {
+  display: inline-block;
+  font-size: 0;
+}
+.speccard .remarks .remark-bd span {
+  line-height: 25px;
+  width: 53px;
+  display: inline-block;
+  font-size: 14px;
+  background: #fff;
+  color: #058fff;
+  border: 1px solid #058fff;
+  border-radius: 100px;
+  text-align: center;
+  margin: 0 6px 20px;
+  cursor: pointer;
+}
+.speccard .remarks .remark-bd span.checked {
+  background: #058fff;
+  color: #fff;
+}
+.scart {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  transition: all ease .2s;
+}
+.scart .mask {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.scart .wrapper {
+  width: 500px;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  border-left: 1px solid #058FFF;
+}
+.scart .wrapper > .hd {
+  line-height: 90px;
+  text-align: center;
+  font-size: 30px;
+  color: #1e1e1e;
+  overflow: hidden;
+}
+.scart .wrapper > .hd em {
+  background: url(../../../images/shopcart-bj.png) no-repeat center center #fff;
+  display: inline-block;
+  vertical-align: middle;
+  width: 70px;
+  height: 70px;
+  margin-right: 25px;
+}
+.scart .wrapper .t-1 {
+  width: 10%;
+}
+.scart .wrapper .t-2 {
+  width: 20%;
+}
+.scart .wrapper .t-3 {
+  width: 10%;
+}
+.scart .wrapper .t-4 {
+  width: 30%;
+}
+.scart .wrapper .t-5 {
+  width: 10%;
+}
+.scart .wrapper .t-6 {
+  width: 20%;
+}
+.scart .wrapper > .thw {
+  display: table;
+  line-height: 50px;
+  background: #058FFF;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+}
+.scart .wrapper > .thw span {
+  display: table-cell;
+}
+.scart .wrapper .tdw {
+  display: table;
+  line-height: 60px;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px dashed #D5D5DB;
+}
+.scart .wrapper .tdw .delete {
+  color: #058FFF;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.scart .wrapper .tdw > div {
+  display: table-cell;
+}
+.scart .wrapper > .bd {
+  position: absolute;
+  width: 100%;
+  overflow-y: auto;
+  left: 0;
+  top: 140px;
+  bottom: 160px;
+  padding: 0 10px;
+}
+.scart .wrapper > .f-tool {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: 30px 20px;
+}
+.scart .wrapper > .f-tool dt {
+  float: right;
+  width: 120px;
+  height: 100%;
+  padding-top: 50px;
+}
+.scart .wrapper > .f-tool dd {
+  margin-right: 120px;
+  text-align: left;
+  line-height: 2em;
+  padding-left: 40px;
+}
+.scart .wrapper > .f-tool dd.total-money {
+  font-size: 32px;
+  color: #FF514D;
+}
+.scart .wrapper > .f-tool dd.total-num {
+  font-size: 18px;
+}
+.orderDetail {
+  padding: 20px 40px 0;
+  font-size: 16px;
+}
+.orderDetail .form-group {
+  display: flex;
+  line-height: 35px;
+  margin-bottom: 30px;
+  justify-content: space-between;
+  position: relative;
+}
+.orderDetail .form-group .confirm {
+  width: 60px;
+  text-align: center;
+  background: #058fff;
+  color: #fff;
+  position: absolute;
+  right: 30px;
+  height: 27px;
+  line-height: 27px;
+  cursor: pointer;
+  border-radius: 100px;
+  font-size: 14px;
+}
+.orderDetail .form-group .add {
+  position: absolute;
+  right: 0;
+  font-size: 30px;
+  color: #058fff;
+  cursor: pointer;
+  top: -6px;
+}
+.orderDetail .form-group label {
+  width: 7em;
+}
+.orderDetail .form-group input {
+  flex: 1;
+  border: 0;
+  border-bottom: 1px solid #d5d5db;
+  outline: 0;
+}
+.orderDetail .form-group textarea {
+  flex: 1;
+  border: 1px solid #d5d5db;
+  resize: none;
+  padding: 0 10px;
+  outline: none;
+}
+.orderDetail h4 {
+  text-align: center;
+  font-size: 18px;
+  position: relative;
+  margin-top: -20px;
+  font-weight: bold;
+}
+.orderDetail h4 em {
+  border-top: 1px dashed #d5d5db;
+  position: absolute;
+  width: 100%;
+  height: 0;
+  left: 0;
+  top: 50%;
+}
+.orderDetail h4 span {
+  display: inline-block;
+  padding: 0 10px;
+  background: #fff;
+  z-index: 2;
+  position: relative;
+}
+.orderDetail .detail {
+  padding: 20px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.orderDetail .detail dl {
+  display: flex;
+  line-height: 35px;
+}
+.orderDetail .detail dl dt {
+  width: 50%;
+}
+.orderDetail .detail dl dd {
+  width: 25%;
+}
+.orderDetail .detail dl dd.money {
+  color: #ff514d;
+  text-align: right;
+}
+.orderDetail .total {
+  margin-top: 10px;
+  text-align: right;
+  border-top: 1px dashed #d5d5db;
+  padding-top: 20px;
+}
+.orderDetail .total span {
+  font-size: 28px;
+  color: #ff514d;
+}
+.confirmOrder {
+  padding: 20px 40px 0;
+  font-size: 16px;
+}
+.confirmOrder .hd {
+  text-align: center;
+  font-size: 24px;
+  line-height: 70px;
+  margin-bottom: 20px;
+  border-bottom: 1px dashed #d5d5db;
+  width: 520px;
+  margin-left: -56px;
+  margin-top: -36px;
+  font-weight: bold;
+  position: relative;
+  border-top: 5px solid #1172C1;
+}
+.confirmOrder .hd small {
+  width: 8px;
+  height: 16px;
+  background-color: #999;
+  border-radius: 50px 0 0 50px ;
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+}
+.confirmOrder .hd small.left {
+  border-radius: 0 50px 50px 0 ;
+  right: auto;
+  left: 0;
+}
+.confirmOrder .hd hr {
+  position: absolute;
+  width: 540px;
+  height: 24px;
+  background: #058fff;
+  border-radius: 100px;
+  left: -10px;
+  top: -12px;
+  border: 0;
+  z-index: -1;
+}
+.confirmOrder .hd span {
+  font-size: 16px;
+}
+.confirmOrder .hd em {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  background: url(../../../images/nc-icon.png) no-repeat center center;
+  background-size: contain;
+  margin-right: 10px;
+  display: inline-block;
+  margin-top: -3px;
+}
+.confirmOrder .form-group {
+  display: flex;
+  line-height: 35px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  position: relative;
+}
+.confirmOrder .form-group .confirm {
+  width: 60px;
+  text-align: center;
+  background: #058fff;
+  color: #fff;
+  position: absolute;
+  right: 30px;
+  height: 27px;
+  line-height: 27px;
+  cursor: pointer;
+  border-radius: 100px;
+  font-size: 14px;
+}
+.confirmOrder .form-group .add {
+  position: absolute;
+  right: 0;
+  font-size: 30px;
+  color: #058fff;
+  cursor: pointer;
+  top: -6px;
+}
+.confirmOrder .form-group label {
+  width: 7em;
+}
+.confirmOrder .form-group input {
+  flex: 1;
+  border: 0;
+  border-bottom: 1px solid #d5d5db;
+  outline: 0;
+}
+.confirmOrder .form-group textarea {
+  flex: 1;
+  border: 0;
+  resize: none;
+  padding: 0 10px;
+  outline: none;
+  color: #666;
+}
+.confirmOrder h4 {
+  text-align: center;
+  font-size: 18px;
+  position: relative;
+  margin-top: -20px;
+  font-weight: bold;
+}
+.confirmOrder h4 em {
+  border-top: 1px dashed #d5d5db;
+  position: absolute;
+  width: 100%;
+  height: 0;
+  left: 0;
+  top: 50%;
+}
+.confirmOrder h4 span {
+  display: inline-block;
+  padding: 0 10px;
+  background: #fff;
+  z-index: 2;
+  position: relative;
+}
+.confirmOrder .detail {
+  padding: 20px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.confirmOrder .detail dl {
+  display: flex;
+  line-height: 35px;
+}
+.confirmOrder .detail dl dt {
+  width: 50%;
+}
+.confirmOrder .detail dl dd {
+  width: 25%;
+}
+.confirmOrder .detail dl dd.money {
+  color: #ff514d;
+  text-align: right;
+}
+.confirmOrder .total {
+  margin-top: 10px;
+  text-align: right;
+  border-top: 1px dashed #d5d5db;
+  padding-top: 20px;
+}
+.confirmOrder .total span {
+  font-size: 28px;
+  color: #ff514d;
+}
+.payType {
+  padding: 0 40px;
+  font-size: 16px;
+}
+.payType span {
+  width: 220px;
+  height: 70px;
+  line-height: 68px;
+  border: 2px solid #d5d5db;
+  text-align: center;
+  display: block;
+  margin: 50px auto 0;
+  border-radius: 4px;
+  overflow: hidden;
+  font-size: 24px;
+  cursor: pointer;
+}
+.payType span:hover {
+  border-color: #058fff;
+}
+.payType span img {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.paySuc {
+  padding: 50px 40px 30px;
+  font-size: 16px;
+  text-align: center;
+  font-size: 28px;
+}
+.paySuc img {
+  margin-bottom: 30px;
 }

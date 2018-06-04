@@ -31,7 +31,7 @@
             </div>
           </div>
           <dl class="f-tool">
-            <dt><Button type="primary" long size="large">下单</Button></dt>
+            <dt><Button type="primary" long size="large" @click="submit">下单</Button></dt>
             <dd class="total-money">￥36</dd>
             <dd class="total-num">商品合计2件</dd>
           </dl>
@@ -50,6 +50,9 @@ export default {
   methods: {
     hide(){
       this.$emit('hide');
+    },
+    submit(){
+      this.$emit('submit')
     }
   },
   mounted() {}

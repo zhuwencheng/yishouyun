@@ -4,7 +4,7 @@
 
 <template>
     <div class="shoplist">
-        <ShopCart :show="shopCartShow" @hide="shopCartShow=false"></ShopCart>
+        <ShopCart :show="shopCartShow" @hide="shopCartShow=false" @submit="cartBalance"></ShopCart>
         <div class="leftmenu">
             <dl v-for="(item,i) in menuList" :key="i"  :class="{active:item.checked}">
                 <dt @click="changeMenu(item)">{{item.title}}<em></em></dt>
@@ -18,7 +18,7 @@
             </div>
             <div class="bd">
                  <Scroll :on-reach-bottom="handleReachBottom" :distance-to-edge='distance' :height="scrollHeight">
-                    <dl class="card" v-for="item in shopList" :key="item.id">
+                    <dl class="card" v-for="item in shopList" :key="item.id" @click="selectShop(item)">
                         <dt><img :src="item.imgUrl" /></dt>
                         <dd>{{item.title}}</dd>
                         <dd class="price">￥{{item.price.toFixed(1)}}</dd>
@@ -41,7 +41,7 @@
               </p>
               <OrderDetail></OrderDetail>
               <div slot="footer">
-                  <Button size="large" type="primary" long >确认</Button>
+                  <Button size="large" type="primary" long @click="toOrderConfirm">确认</Button>
               </div>
           </Modal>
           <!-- 订单确认页面 -->
@@ -49,7 +49,7 @@
               <ConfirmOrder></ConfirmOrder>
               <div slot="footer" class="btw-footer">
                   <Button size="large" type="ghost">取消订单</Button>
-                  <Button size="large" type="primary">确认结账</Button>
+                  <Button size="large" type="primary" @click="SubOrderConfirm">确认结账</Button>
               </div>
           </Modal>
           <!-- 订单详情配置 -->
@@ -57,7 +57,7 @@
                <p slot="header" class="o-dhead">
                   选择支付方式
               </p>
-              <PayType></PayType>
+              <PayType @select="selectPayType"></PayType>
               <div slot="footer"></div>
           </Modal>
           <!-- 支付成功 -->
@@ -108,7 +108,7 @@ export default {
       showConfirmModel:false,
       showPayType:false,
       showPayResult:false,
-      addUserModel:true,
+      addUserModel:false,
       scrollHeight:'100%',
       menuList: [
         {
@@ -193,6 +193,25 @@ export default {
     },
     handleReachBottom() {
       console.log(111);
+    },
+    selectShop(){
+      this.showShopCard=true;
+    },
+    cartBalance(){
+      this.shopCartShow=false;
+      this.showOrdermodel=true;
+    },
+    toOrderConfirm(){
+      this.showOrdermodel=false;
+      this.showConfirmModel=true;
+    },
+    SubOrderConfirm(){
+      this.showConfirmModel=false;
+      this.showPayType=true;
+    },
+    selectPayType(){
+      this.showPayType=false;
+      this.showPayResult=true;
     }
   },
   mounted() {}

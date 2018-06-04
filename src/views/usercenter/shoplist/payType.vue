@@ -4,10 +4,10 @@
 
 <template>
     <div class="payType">
-      <span><img :src="imgUrl.wx" /></span>
-      <span><img :src="imgUrl.zfb" /></span>
-      <span><img :src="imgUrl.yhk" />银行卡</span>
-      <span><img :src="imgUrl.xj" />现金</span>
+      <span @click="select"><img :src="imgUrl.wx" /></span>
+      <span @click="select"><img :src="imgUrl.zfb" /></span>
+      <span @click="select"><img :src="imgUrl.yhk" />银行卡</span>
+      <span @click="select"><img :src="imgUrl.xj" />现金</span>
     </div>
     
 </template>
@@ -26,7 +26,11 @@ export default {
     };
   },
   props:['value'],
-  methods: {},
+  methods: {
+    select(){
+      this.$emit('select')
+    }
+  },
   mounted() {}
 };
 </script>
