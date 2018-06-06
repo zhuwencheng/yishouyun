@@ -44,8 +44,8 @@
                     <input type="text"> -->
                 </div>
                  <div class="form-group n-b">
-                    <Button type="ghost">查询</Button>
-                   <Button type="primary" @click="edit">新增</Button>
+                    <Button type="ghost" @click="queryFilter">查询</Button>
+                   <Button type="primary" @click="add">新增</Button>
                 </div>
             </div>
         </div>
@@ -122,6 +122,13 @@ export default {
         userName: "zhuwencheng"
       };
       this.addUserModel = true;
+    },
+    add(){
+      this.currentUser = null;
+      this.addUserModel = true;
+    },
+    queryFilter(){
+      this.$Message.success("进行查询！");
     }
   },
   mounted() {

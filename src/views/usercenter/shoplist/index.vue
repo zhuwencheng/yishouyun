@@ -82,13 +82,13 @@
 </template>
 
 <script>
-import SpecCard from './specCard';//商品配置弹窗
-import ShopCart from './shopcart';//购物车
-import OrderDetail from './orderDetail';//订单详情配置
-import ConfirmOrder from './confirmOrder';//订单详情配置
-import PayType from './payType';//订单详情配置
-import PaySuc from './paySuc';//订单详情配置
-import AddUser from '../../my-components/edit-user/index';//新增用户配置
+import SpecCard from "./specCard"; //商品配置弹窗
+import ShopCart from "./shopcart"; //购物车
+import OrderDetail from "./orderDetail"; //订单详情配置
+import ConfirmOrder from "./confirmOrder"; //订单详情配置
+import PayType from "./payType"; //订单详情配置
+import PaySuc from "./paySuc"; //订单详情配置
+import AddUser from "../../my-components/edit-user/index"; //新增用户配置
 export default {
   components: {
     SpecCard,
@@ -102,14 +102,26 @@ export default {
   data() {
     return {
       distance: -100,
-      showShopCard:false,
-      shopCartShow:false,
-      showOrdermodel:false,
-      showConfirmModel:false,
-      showPayType:false,
-      showPayResult:false,
-      addUserModel:false,
-      scrollHeight:'100%',
+      showShopCard: false,
+      shopCartShow: false,
+      showOrdermodel: false,
+      showConfirmModel: false,
+      showPayType: false,
+      showPayResult: false,
+      addUserModel: false,
+      scrollHeight: "100%",
+      shopCartData: {
+        shopData: [
+          {
+            shopNo: "",
+            num: "",
+            remarks: [],
+            shopName: ""
+          }
+        ],
+        buyer:'',
+        orderDes:''
+      },
       menuList: [
         {
           title: "果茶系列",
@@ -171,15 +183,15 @@ export default {
           title: "招牌奶茶" + index
         };
       }),
-      specCardData:{
-        shopTitle:'01-招牌奶茶',
-        num:1,
-        remark:[
-          {name:'冰',id:1},
-          {name:'冰',id:2},
-          {name:'冰',id:3}
+      specCardData: {
+        shopTitle: "01-招牌奶茶",
+        num: 1,
+        remark: [
+          { name: "冰", id: 1 },
+          { name: "冰", id: 2 },
+          { name: "冰", id: 3 }
         ],
-        imgUrl:'http://iph.href.lu/270x270'
+        imgUrl: "http://iph.href.lu/270x270"
       }
     };
   },
@@ -194,24 +206,24 @@ export default {
     handleReachBottom() {
       console.log(111);
     },
-    selectShop(){
-      this.showShopCard=true;
+    selectShop() {
+      this.showShopCard = true;
     },
-    cartBalance(){
-      this.shopCartShow=false;
-      this.showOrdermodel=true;
+    cartBalance() {
+      this.shopCartShow = false;
+      this.showOrdermodel = true;
     },
-    toOrderConfirm(){
-      this.showOrdermodel=false;
-      this.showConfirmModel=true;
+    toOrderConfirm() {
+      this.showOrdermodel = false;
+      this.showConfirmModel = true;
     },
-    SubOrderConfirm(){
-      this.showConfirmModel=false;
-      this.showPayType=true;
+    SubOrderConfirm() {
+      this.showConfirmModel = false;
+      this.showPayType = true;
     },
-    selectPayType(){
-      this.showPayType=false;
-      this.showPayResult=true;
+    selectPayType() {
+      this.showPayType = false;
+      this.showPayResult = true;
     }
   },
   mounted() {}
@@ -219,29 +231,30 @@ export default {
 </script>
 
 <style>
-.xz-model .ivu-modal-footer{
+.xz-model .ivu-modal-footer {
   border-top: 0;
   font-style: 16px;
   padding: 12px 58px 30px;
-} 
-.xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
-  color: #058FFF;
 }
-.xz-model .ivu-btn-large{
+.xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
+  color: #058fff;
+}
+.xz-model .ivu-btn-large {
   padding: 12px 15px 12px;
   font-size: 16px;
 }
-.ivu-tooltip-inner{
+.ivu-tooltip-inner {
   color: #333;
   background: #fff;
 }
-.ivu-tooltip-popper[x-placement^=bottom] .ivu-tooltip-arrow{
+.ivu-tooltip-popper[x-placement^="bottom"] .ivu-tooltip-arrow {
   border-bottom-color: #ccc;
 }
-.ivu-scroll-wrapper,.ivu-scroll-container{
+.ivu-scroll-wrapper,
+.ivu-scroll-container {
   height: 100%;
 }
-.bl-header .ivu-modal-header{
+.bl-header .ivu-modal-header {
   background: #058fff;
   color: #fff;
   text-align: center;
@@ -250,21 +263,21 @@ export default {
   border-bottom: 0;
 }
 .bl-header .ivu-modal-close .ivu-icon-ios-close-empty {
-    color: #fff;
+  color: #fff;
 }
-.o-dhead{
+.o-dhead {
   font-size: 20px !important;
   color: #fff !important;
   line-height: 40px !important;
   height: 40px !important;
 }
-.o-dhead em{
-  font-size:16px;
+.o-dhead em {
+  font-size: 16px;
 }
-.bl-header .ivu-modal-close{
+.bl-header .ivu-modal-close {
   top: 18px;
 }
-.o-dhead .l-icon{
+.o-dhead .l-icon {
   width: 30px;
   height: 30px;
   vertical-align: middle;
@@ -272,7 +285,7 @@ export default {
   margin-right: 10px;
   display: inline-block;
 }
-.btw-footer{
+.btw-footer {
   display: flex;
   justify-content: space-between;
 }

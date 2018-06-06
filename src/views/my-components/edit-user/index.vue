@@ -95,7 +95,7 @@ export default {
       ]
     };
   },
-  props: ["currentUser"],
+  props: ["userData"],
 
   methods: {
     handleSubmit() {
@@ -107,9 +107,9 @@ export default {
     },
   },
   watch:{
-      currentUser:function(){
-        if(this.currentUser){
-           this.form=JSON.parse(JSON.stringify(this.someProps));
+      userData:function(){
+        if(this.userData){
+           this.form=JSON.parse(JSON.stringify(this.userData));
         }else{
           this.form={
             phone: "",
@@ -122,7 +122,7 @@ export default {
       }
   },
   mounted() {
-    console.log(this.currentUser,222);
+    //console.log(this.currentUser,222);
   }
 };
 </script>
