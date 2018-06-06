@@ -3,9 +3,10 @@
 </style>
 
 <template>
+<div class="l-bj">
    <div class="forgetpwd" @keydown.enter="handleSubmit">
        <div class="hd">找回密码</div>
-        <Form ref="loginForm" :model="form" :rules="rules">
+        <Form ref="forgetpwdForm" :model="form" :rules="rules">
             <FormItem prop="phone" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
@@ -14,13 +15,13 @@
                     <input type="text" v-model="form.phone"/>
                 </div>
             </FormItem>
-            <FormItem prop="userName" class="reset-ivu-form-item">
+            <FormItem prop="code" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
                         验证码
                     </label>
-                    <input type="text" v-model="form.userName"/>
-                    <span class="sendcode">发送验证码</span>
+                    <input type="text" v-model="form.code"/>
+                    <CountDown class="sendcode"  @send="send"></CountDown>
                 </div>
             </FormItem>
             <div class="submit" @click="handleSubmit">
@@ -28,28 +29,22 @@
             </div>
         </Form>
    </div>
+</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
-import XzSelect from "./my-components/xz-select";
+import CountDown from "./my-components/count-down";
 export default {
   components: {
-    XzSelect
+    CountDown
   },
   data() {
     return {
       form: {
-        userName: "zhuwencheng",
-        password: "",
         phone: "",
-        system: "0"
+        code: ""
       },
-      selectOptions: [
-        { label: "前台收银", value: "0" },
-        { label: "订单管理", value: "1" },
-        { label: "会员管理", value: "2" }
-      ],
       rules: {
         phone: [
           {
@@ -59,24 +54,22 @@ export default {
             trigger: "blur"
           }
         ],
-        userName: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "请填写6-20位的密码", trigger: "blur" }]
+        code: [
+          { required: true, message: "请填写正确的验证码", trigger: "blur" }
+        ]
       }
     };
   },
   methods: {
     handleSubmit() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.forgetpwdForm.validate(valid => {
         if (valid) {
-          Cookies.set('user', this.form.userName);
-          Cookies.set('password', this.form.password);
-          this.$router.push({
-              name: 'shoplist'
-          });
+          this.$Message.success('成功提示！');
         }
       });
+    },
+    send(){
+      this.$Message.success('发送成功！');
     }
   }
 };

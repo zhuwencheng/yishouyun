@@ -3,23 +3,24 @@
 </style>
 
 <template>
+<div class="l-bj">
    <div class="resetpwd" @keydown.enter="handleSubmit">
        <div class="hd">重置密码</div>
-        <Form ref="loginForm" :model="form" :rules="rules">
-            <FormItem prop="phone" class="reset-ivu-form-item">
+        <Form ref="form" :model="form" :rules="rules">
+            <FormItem prop="password" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
                         重新设置密码
                     </label>
-                    <input type="text" v-model="form.phone"/>
+                    <input type="text" v-model="form.password"/>
                 </div>
             </FormItem>
-            <FormItem prop="userName" class="reset-ivu-form-item">
+            <FormItem prop="rePassword" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
                         确认密码
                     </label>
-                    <input type="text" v-model="form.userName"/>
+                    <input type="text" v-model="form.rePassword"/>
                 </div>
             </FormItem>
             <div class="submit" @click="handleSubmit">
@@ -27,22 +28,38 @@
             </div>
         </Form>
    </div>
+</div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
-import XzSelect from "./my-components/xz-select";
 export default {
   components: {
-    XzSelect
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请填写密码"));
+      } else {
+        if (this.form.rePassword !== "") {
+          this.$refs.form.validateField("rePassword");
+        }
+        callback();
+      }
+    };
+    const validatePassCheck = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("重复密码不能为空"));
+      } else if (value !== this.form.password) {
+        callback(new Error("两次的密码不一致"));
+      } else {
+        callback();
+      }
+    };
     return {
       form: {
-        userName: "zhuwencheng",
         password: "",
-        phone: "",
-        system: "0"
+        rePassword: ""
       },
       selectOptions: [
         { label: "前台收银", value: "0" },
@@ -50,29 +67,19 @@ export default {
         { label: "会员管理", value: "2" }
       ],
       rules: {
-        phone: [
-          {
-            required: true,
-            message: "请填写正确格式的手机号",
-            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
-            trigger: "blur"
-          }
-        ],
-        userName: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "请填写6-20位的密码", trigger: "blur" }]
+        password: [{ validator: validatePass, trigger: "blur" }],
+        rePassword: [{ validator: validatePassCheck, trigger: "blur" }]
       }
     };
   },
   methods: {
     handleSubmit() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.form.validate(valid => {
         if (valid) {
-          Cookies.set('user', this.form.userName);
-          Cookies.set('password', this.form.password);
+          Cookies.set("user", this.form.userName);
+          Cookies.set("password", this.form.password);
           this.$router.push({
-              name: 'shoplist'
+            name: "shoplist"
           });
         }
       });

@@ -119,6 +119,7 @@ export default {
   data() {
     return {
       orderDetailModel:true,
+      jyType:'',
       tableData: [
         {
           time: "2017-01-01 16:22",

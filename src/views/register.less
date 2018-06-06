@@ -1,4 +1,8 @@
-
+.l-bj{
+    background: #f8f9fd url(../images/loginBg.png) center center no-repeat;
+    height: 100%;
+    width: 100%;
+}
 .register{
     width: 510px;
     background: #fff;
@@ -38,14 +42,18 @@
         font-size: 16px;
         justify-content:space-between;
         .sendcode{
-            width: 6em;
+            width: 8em;
             text-align: right;
             color: #058FFF;
             cursor: pointer;
+            &.disabled{
+                color: #ACACAD;
+                cursor: not-allowed;
+            }
         }
         label{
             display: inline-block;
-            width: 5em;
+            width: 6em;
         }
         input[type=text],input[type=password],input[type=number]{
             outline: none;
@@ -53,6 +61,8 @@
             color: #64656D;
             margin-left: 20px;
             flex: 1;
+            height: 65px;
+            line-height: 65px;
         }
     }
     .submit{

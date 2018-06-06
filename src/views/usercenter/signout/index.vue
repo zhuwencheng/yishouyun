@@ -10,9 +10,9 @@
                 <label>
                     收银员：
                 </label>
-                <input type="text"/>
+                <input type="text" v-model="userName"/>
             </div>
-            <div class="submit">
+            <div class="submit"  @click="handleSubmit">
                 <span class="btn">退出</span>
             </div>
         </div>
@@ -26,10 +26,19 @@ export default {
   components: {},
   data() {
     return {
-      //交易方式
+      userName: ""
     };
   },
-  methods: {},
+  methods: {
+    handleSubmit() {
+      const _this = this;
+      _this.$Spin.show();
+      setTimeout(() => {
+          this.$Spin.hide();
+        _this.$Message.success("成功提示！");
+      }, 1000);
+    }
+  },
   mounted() {}
 };
 </script>

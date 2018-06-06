@@ -18,7 +18,7 @@ export default {
   name: "xz-select",
   data() {
     return {
-      currentIndex: 0
+      //currentIndex: 0
     };
   },
   props: ["value", "options"],
@@ -32,8 +32,18 @@ export default {
       if (a >= this.options.length) {
         a = this.options.length - 1;
       }
-      this.currentIndex = a;
-      this.$emit('input',this.options[this.currentIndex].value);
+      //this.currentIndex = a;
+      this.$emit('input',this.options[a].value);
+    }
+  },
+  computed:{
+    currentIndex:function(){
+      const _this=this;
+      var index=this.options.findIndex(function(item){
+        return _this.value==item.value;
+      });
+      index>0?'':index=0;
+      return index;
     }
   },
   mounted() {}

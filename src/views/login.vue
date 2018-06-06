@@ -3,46 +3,48 @@
 </style>
 
 <template>
-   <div class="login" @keydown.enter="handleSubmit">
-        <Form ref="loginForm" :model="form" :rules="rules">
-            <FormItem prop="phone" class="reset-ivu-form-item">
-                <div class="xz-form-group">
-                    <label>
-                        门店手机号
-                    </label>
-                    <input type="text" v-model="form.phone"/>
-                </div>
-            </FormItem>
-            <FormItem prop="userName" class="reset-ivu-form-item">
-                <div class="xz-form-group">
-                    <label>
-                        帐号
-                    </label>
-                    <input type="text" v-model="form.userName"/>
-                </div>
-            </FormItem>
-            <FormItem prop="password" class="reset-ivu-form-item">
-                <div class="xz-form-group">
-                    <label>
-                        密码
-                    </label>
-                    <input type="password" v-model="form.password"/>
-                </div>
-            </FormItem>
-            <div class="xz-form-group">
-                <label>
-                    请选择系统
-                </label>
-                <XzSelect v-model="form.system" :options="selectOptions" class="fr" style="margin-top:10px"></XzSelect>
-            </div>
-            <div class="hidden o-link">
-                <a href="#/forgetpwd">忘记密码</a>
-                <a href="#/register" class="fr">注册</a>
-            </div>
-            <div class="submit" @click="handleSubmit">
-                <span class="btn">登录</span>
-            </div>
-        </Form>
+   <div class="l-bj">
+            <div class="login" @keydown.enter="handleSubmit">
+                <Form ref="loginForm" :model="form" :rules="rules">
+                    <FormItem prop="phone" class="reset-ivu-form-item">
+                        <div class="xz-form-group">
+                            <label>
+                                门店手机号
+                            </label>
+                            <input type="text" v-model="form.phone"/>
+                        </div>
+                    </FormItem>
+                    <FormItem prop="userName" class="reset-ivu-form-item">
+                        <div class="xz-form-group">
+                            <label>
+                                帐号
+                            </label>
+                            <input type="text" v-model="form.userName"/>
+                        </div>
+                    </FormItem>
+                    <FormItem prop="password" class="reset-ivu-form-item">
+                        <div class="xz-form-group">
+                            <label>
+                                密码
+                            </label>
+                            <input type="password" v-model="form.password"/>
+                        </div>
+                    </FormItem>
+                    <div class="xz-form-group">
+                        <label>
+                            请选择系统
+                        </label>
+                        <XzSelect v-model="form.system" :options="selectOptions" class="fr" style="margin-top:10px"></XzSelect>
+                    </div>
+                    <div class="hidden o-link">
+                        <a href="#/forgetpwd">忘记密码</a>
+                        <a href="#/register" class="fr">注册</a>
+                    </div>
+                    <div class="submit" @click="handleSubmit">
+                        <span class="btn">登录</span>
+                    </div>
+                </Form>
+        </div>
    </div>
 </template>
 
@@ -56,7 +58,7 @@ export default {
   data() {
     return {
       form: {
-        userName: "zhuwencheng",
+        userName: "",
         password: "",
         phone: "",
         system: "0"
@@ -78,7 +80,9 @@ export default {
         userName: [
           { required: true, message: "账号不能为空", trigger: "blur" }
         ],
-        password: [{ required: true, message: "请填写6-20位的密码", trigger: "blur" }]
+        password: [
+          { required: true, message: "请填写6-20位的密码", trigger: "blur" }
+        ]
       }
     };
   },
@@ -86,14 +90,17 @@ export default {
     handleSubmit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          Cookies.set('user', this.form.userName);
-          Cookies.set('password', this.form.password);
+          Cookies.set("user", this.form.userName);
+          Cookies.set("password", this.form.password);
           this.$router.push({
-              name: 'shoplist'
+            name: "shoplist"
           });
         }
       });
     }
+  },
+  created(){
+    //console.log(this.$http);
   }
 };
 </script>
