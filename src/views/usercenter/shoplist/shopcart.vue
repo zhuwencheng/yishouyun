@@ -6,7 +6,7 @@
     <div class="scart" v-show="show">
         <div class="mask" @click="hide"></div>
         <div class="wrapper">
-          <div class="hd"><em></em>购物车</div>
+          <div class="hd"><em></em>购物车{{shopCartDone[0].shopTitle}}</div>
           <div class="thw">
             <span class="t-1">序号</span>
             <span class="t-2">名称</span>
@@ -20,7 +20,7 @@
               <div class="t-1">01</div>
               <div class="t-2">招牌奶茶</div>
               <div class="t-3">18</div>
-              <div class="t-4">2</div>
+              <div class="t-4"><InputNumber v-model="num" @change="changeNum"/></div>
               <div class="t-5">36</div>
               <div class="t-6">
                 <Tooltip content="01招牌奶茶 冰/少糖" placement="bottom-end">
@@ -41,21 +41,32 @@
 </template>
 
 <script>
+import { mapGetters, mapActions ,mapState} from "vuex";
+import InputNumber from "../../my-components/InputNumber"; //新增用户配置
 export default {
-  components: {},
-  data() {
-    return {};
+  components: {
+    InputNumber
   },
-  props:['show'],
+  data() {
+    return {
+      num: 2
+    };
+  },
+  props: ["show"],
   methods: {
-    hide(){
-      this.$emit('hide');
+    hide() {
+      this.$emit("hide");
     },
-    submit(){
-      this.$emit('submit')
+    submit() {
+      this.$emit("submit");
+    },
+    changeNum() {
+      console.log(123);
     }
   },
-  mounted() {}
+  computed: {
+    ...mapGetters("app", ['shopCartDone','shopCartNum'])
+  }
 };
 </script>
 
