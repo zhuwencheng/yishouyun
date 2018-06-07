@@ -22,7 +22,7 @@
             <div class="td">{{item.type}}</div>
             <div class="td">{{item.price}}</div>
             <div class="td">{{item.status}}</div>
-            <div class="td toolbtn"><span>查看详情</span><span>补打</span></div>
+            <div class="td toolbtn"><span @click="readDetail(item)">查看详情</span><span @click="print(item)">补打</span></div>
         </div>
     </div>
     
@@ -35,9 +35,16 @@ export default {
     return {};
   },
   props: ["tabledata"],
-  methods: {},
+  methods: {
+      readDetail(item){
+          this.$emit('readMore');
+      },
+      print(item){
+          this.$Message.success("补打内容");
+      }
+  },
   mounted(){
-      console.log(this.tabledata)
+      //console.log(this.tabledata)
   }
 };
 </script>

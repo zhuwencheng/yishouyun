@@ -42,7 +42,7 @@
                 </div>
                  <div class="form-group n-b">
                     <Button type="ghost">统计</Button>
-                   <Button type="primary">查询</Button>
+                   <Button type="primary" @click="queryFilter">查询</Button>
                 </div>
             </div>
         </div>
@@ -161,7 +161,10 @@ export default {
       console.log("页数改变");
     },
     readOrderDetail(item){
-
+      this.orderDetailModel=true;
+    },
+    queryFilter(){
+      this.$Message.success("进行查询！");
     }
   },
   mounted() {

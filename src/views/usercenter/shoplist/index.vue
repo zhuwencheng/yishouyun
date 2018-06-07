@@ -177,7 +177,7 @@ export default {
       ],
       shopList: Array.apply(null, { length: 20 }).map((item, index) => {
         return {
-          imgUrl: "http://iph.href.lu/270x270",
+          imgUrl: "http://placeholder.qiniudn.com/270x270",
           id: index,
           price: 20 + index,
           title: "招牌奶茶" + index
@@ -191,7 +191,7 @@ export default {
           { name: "冰", id: 2 },
           { name: "冰", id: 3 }
         ],
-        imgUrl: "http://iph.href.lu/270x270"
+        imgUrl: "http://placeholder.qiniudn.com/270x270"
       }
     };
   },
