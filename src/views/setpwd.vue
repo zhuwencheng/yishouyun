@@ -34,12 +34,11 @@
 <script>
 import Cookies from "js-cookie";
 export default {
-  components: {
-  },
+  components: {},
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请填写密码"));
+      if (value === "" || value.length > 16 || value.length < 6) {
+        callback(new Error("请填写6-16位的密码"));
       } else {
         if (this.form.rePassword !== "") {
           this.$refs.form.validateField("rePassword");
@@ -58,14 +57,10 @@ export default {
     };
     return {
       form: {
+        phone: null,
         password: "",
         rePassword: ""
       },
-      selectOptions: [
-        { label: "前台收银", value: "0" },
-        { label: "订单管理", value: "1" },
-        { label: "会员管理", value: "2" }
-      ],
       rules: {
         password: [{ validator: validatePass, trigger: "blur" }],
         rePassword: [{ validator: validatePassCheck, trigger: "blur" }]
@@ -74,16 +69,42 @@ export default {
   },
   methods: {
     handleSubmit() {
+      const _this = this;
       this.$refs.form.validate(valid => {
         if (valid) {
-          // Cookies.set("user", this.form.userName);
-          // Cookies.set("password", this.form.password);
-          // this.$router.push({
-          //   name: "shoplist"
-          // });
+          _this.$Spin.show();
+          _this.$http
+            .post("/api/users/register/step2", {
+              password: _this.form.password,
+              confirmPassword: _this.form.rePassword,
+              account: _this.form.phone
+            })
+            .then(function(res) {
+              const result = res.data;
+              if (result.code === "200") {
+                _this.$Spin.hide();
+                _this.$Message.success("修改密码成功！");
+                setTimeout(function() {
+                  _this.$router.push({
+                    name: "login"
+                  });
+                }, 2000);
+              } else {
+                _this.$Spin.hide();
+                _this.$Message.error(result.message);
+              }
+            })
+            .catch(function(error) {
+              _this.$Spin.hide();
+              _this.$Message.error("网络异常！");
+            });
         }
       });
     }
+  },
+  created() {
+    this.form.phone = this.$route.params.phone;
+    console.log(this.form.phone);
   }
 };
 </script>

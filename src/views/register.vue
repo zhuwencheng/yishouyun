@@ -12,7 +12,7 @@
                     <label>
                         门店手机号
                     </label>
-                    <input type="text" v-model="form.phone"/>
+                    <input type="text" v-model="form.phone" maxlength="11"/>
                 </div>
             </FormItem>
             <FormItem prop="code" class="reset-ivu-form-item">
@@ -20,8 +20,8 @@
                     <label>
                         验证码
                     </label>
-                    <input type="text" v-model="form.code"/>
-                    <CountDown class="sendcode"  @send="send"></CountDown>
+                    <input type="text" v-model="form.code" maxlength="6"/>
+                    <CountDown class="sendcode"  @send="send" v-if="isVPhone"></CountDown>
                 </div>
             </FormItem>
             <div class="submit" @click="handleSubmit">
@@ -62,14 +62,57 @@ export default {
   },
   methods: {
     handleSubmit() {
+      const _this = this;
       this.$refs.registerForm.validate(valid => {
         if (valid) {
-          this.$Message.success("成功提示！");
+          _this.$http
+            .post("/api/users/register/step1", {
+              account: _this.form.phone,
+              phoneCode: _this.form.code
+            })
+            .then(function(res) {
+              const result = res.data;
+              if (result.code === "200") {
+                _this.$router.push({
+                  name: "setpwd",
+                  params: {
+                    phone: _this.form.phone
+                  }
+                });
+              } else {
+                _this.$Message.error(result.message);
+              }
+            })
+            .catch(function(error) {
+              _this.$Spin.hide();
+              _this.$Message.error("网络异常！");
+            });
         }
       });
     },
     send() {
-      this.$Message.success("发送成功！");
+      const _this = this;
+      const params = _this.form;
+      this.$http
+        .post("/api/users/register/sendSms", { account: _this.form.phone })
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Message.success("发送成功！");
+          } else {
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+    }
+  },
+  computed: {
+    isVPhone() {
+      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      return reg.test(this.form.phone);
     }
   }
 };

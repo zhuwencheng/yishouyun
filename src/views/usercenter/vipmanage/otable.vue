@@ -13,14 +13,14 @@
             <div class="th">生日</div>
             <div class="th">操作</div>
         </div>
-        <div class="tr" v-for="(item) in tabledata" :key="item.orderNo">
-            <div class="td">{{item.time}}</div>
-            <div class="td">{{item.mcode}}</div>
-            <div class="td">{{item.orderNo}}</div>
-            <div class="td">{{item.phone}}</div>
-            <div class="td">{{item.type}}</div>
-            <div class="td">{{item.price}}</div>
-            <div class="td toolbtn"><span @click="edit">修改</span></div>
+        <div class="tr" v-for="(item) in tabledata" :key="item.memberId">
+            <div class="td">{{item.memberName}}</div>
+            <div class="td">{{item.memberPhone}}</div>
+            <div class="td"></div>
+            <div class="td">{{item.createTime}}</div>
+            <div class="td">{{item.memberLevelId}}</div>
+            <div class="td">{{item.memberBirthday}}</div>
+            <div class="td toolbtn"><span @click="edit(item)">修改</span></div>
         </div>
     </div>
     
@@ -34,12 +34,12 @@ export default {
   },
   props: ["tabledata"],
   methods: {
-      edit(){
-          this.$emit('edit');
-      }
+    edit(item) {
+      this.$emit("edit", item);
+    }
   },
-  mounted(){
-      console.log(this.tabledata)
+  mounted() {
+    console.log(this.tabledata);
   }
 };
 </script>

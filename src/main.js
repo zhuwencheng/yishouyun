@@ -8,7 +8,16 @@ import 'iview/dist/styles/iview.css';
 import './styles/common.less';
 import util from './libs/util';
 import axios from 'axios';
+// var instance = axios.create({
+//     baseURL: 'http://192.168.30.120:8081',
+//     timeout: 5000,
+//     // headers: {
+//     // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+//     // }
+// });
 Vue.prototype.$http = axios;
+// import  VueResource  from 'vue-resource'
+// Vue.use(VueResource) 
 Vue.use(iView);
 
 new Vue({

@@ -18,7 +18,7 @@ export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    if (!Cookies.get('user') && to.meta.requireAuth) { // 判断是否已经登录且前往的页面不是登录页
+    if (!sessionStorage.token && to.meta.requireAuth) { // 判断是否已经登录且前往的页面不是登录页
         next({
             name: 'login'
         });

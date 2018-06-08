@@ -6,39 +6,39 @@
 <template>
     <div class="edituser" @keydown.enter="handleSubmit">
       <Form ref="editUserForm" :model="form" :rules="rules">
-          <FormItem prop="userName" class="reset-ivu-form-item">
+          <FormItem prop="memberName" class="reset-ivu-form-item">
             <div class="form-group">
               <em class="icon user-icon"></em>
               <div class="item">
                 <label><em>*</em>姓名</label>
-                <input type="text" v-model="form.userName"/>
+                <input type="text" v-model="form.memberName"/>
               </div>
             </div>
           </FormItem>
-          <FormItem prop="phone" class="reset-ivu-form-item">
+          <FormItem prop="memberPhone" class="reset-ivu-form-item">
             <div class="form-group">
               <em class="icon phone-icon"></em>
               <div class="item">
                 <label><em>*</em>手机号</label>
-                <input type="text" v-model="form.phone"/>
+                <input type="text" v-model="form.memberPhone"/>
               </div>
             </div>
           </FormItem>
-          <FormItem prop="birthday" class="reset-ivu-form-item">
+          <FormItem prop="memberBirthday" class="reset-ivu-form-item">
             <div class="form-group">
               <em class="icon bir-icon"></em>
               <div class="item">
                 <label>生日</label>
-                <DatePicker type="date" placeholder="选择生日" style="width: 200px" v-model="form.birthday"></DatePicker>
+                <DatePicker type="date" placeholder="选择生日" style="width: 200px" v-model="form.memberBirthday"></DatePicker>
               </div>
             </div>
           </FormItem>
-          <FormItem prop="grade" class="reset-ivu-form-item">
+          <FormItem prop="memberLevelId" class="reset-ivu-form-item">
             <div class="form-group">
               <em class="icon  grade-icon"></em>
               <div class="item">
                 <label>会员等级</label>
-                <Select v-model="form.grade" style="width:200px">
+                <Select v-model="form.memberLevelId" style="width:200px">
                     <Option v-for="item in selectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <!-- <XzSelect v-model="grade" :options="selectOptions" class="fr"></XzSelect> -->
@@ -62,13 +62,13 @@ export default {
   data() {
     return {
       form: {
-        phone: "",
-        birthday: "",
-        grade: "",
-        userName: ""
+        memberPhone: "",
+        memberBirthday: "",
+        memberLevelId: "",
+        memberName: ""
       },
       rules: {
-        phone: [
+        memberPhone: [
           {
             required: true,
             message: "请填写正确格式的手机号",
@@ -76,13 +76,13 @@ export default {
             trigger: "blur"
           }
         ],
-        birthday: [
+        memberBirthday: [
           { required: true, message: "请填写生日"}
         ],
-        grade: [
+        memberLevelId: [
           { required: true, message: "请设置等级", trigger: "blur" }
         ],
-        userName: [
+        memberName: [
           { required: true, message: "请填写用户名", trigger: "blur" }
         ]
       },
@@ -112,10 +112,10 @@ export default {
            this.form=JSON.parse(JSON.stringify(this.userData));
         }else{
           this.form={
-            phone: "",
-            birthday: "",
-            grade: "",
-            userName: ""
+            memberPhone: "",
+            memberBirthday: "",
+            memberLevelId: "",
+            memberName: ""
           }
         }
          

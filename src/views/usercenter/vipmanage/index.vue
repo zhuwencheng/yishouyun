@@ -8,7 +8,7 @@
             <div class="form-set">
                 <div class="form-group">
                     <label>姓名</label>
-                    <input type="text" v-model="filterParams.userName">
+                    <input type="text" v-model="filterParams.memberName">
                 </div>
                  <div class="form-group">
                     <label>手机号</label>
@@ -16,11 +16,11 @@
                 </div>
                  <div class="form-group">
                     <label>生日</label>
-                     <DatePicker type="date" placeholder="选择生日" style="width: 200px" v-model="filterParams.birthday"></DatePicker>
+                     <DatePicker type="date" placeholder="选择生日" style="width: 200px" v-model="filterParams.memberBirthday"></DatePicker>
                 </div>
                  <div class="form-group">
                     <label>等级</label>
-                    <Select v-model="filterParams.grade" style="width:200px">
+                    <Select v-model="filterParams.memberLevelId" style="width:200px">
                         <Option v-for="item in selectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </div>
@@ -44,21 +44,21 @@
                     <input type="text"> -->
                 </div>
                  <div class="form-group n-b">
-                    <Button type="ghost" @click="queryFilter">查询</Button>
+                    <Button type="ghost" @click="queryFilter(true)">查询</Button>
                    <Button type="primary" @click="add">新增</Button>
                 </div>
             </div>
         </div>
         <div class="content">
             <OTable :tabledata="tableData" @edit="edit"></OTable>
-            <Page :total="total" show-elevator class="page" :current="filterParams.pageIndex" @on-change="changePage"></Page>
+            <Page :total="total" show-elevator class="page" :current="filterParams.page_num" @on-change="changePage"></Page>
         </div>
         <!-- 新增用户 -->
           <Modal v-model="addUserModel" class="xz-model bl-header">
                <p slot="header" class="o-dhead">
                   新增/修改会员
               </p>
-              <AddUser :userData.sync="currentUser"></AddUser>
+              <AddUser :userData="currentUser"></AddUser>
               <div slot="footer"></div>
           </Modal>
     </div>
@@ -82,11 +82,12 @@ export default {
       total: 52,
       currentUser: null,
       filterParams: {
-        pageIndex: 1,
-        userName: "",
-        phone: "",
-        birthday: "",
-        grade: "",
+        page_num: 1,
+        page_size: 10,
+        memberName: "",
+        memberPhone: "",
+        memberBirthday: "",
+        memberLevelId: "",
         cardNumber: "",
         dateArea: []
       },
@@ -97,42 +98,52 @@ export default {
         { label: "白金", value: "3" },
         { label: "砖石", value: "4" }
       ],
-      tableData: [
-        {
-          time: "2017-01-01 16:22",
-          mcode: "142133253252",
-          orderNo: "1",
-          phone: "15927216320",
-          type: "微信",
-          price: "36.00",
-          status: "成功"
-        }
-      ]
+      tableData: []
     };
   },
   methods: {
-    changePage() {
-      console.log("页数改变");
+    changePage(pageIndex) {
+      const _this = this;
+      _this.filterParams.page_num = pageIndex;
+      _this.queryFilter();
     },
-    edit() {
-      this.currentUser = {
-        phone: "15927216320",
-        birthday: "",
-        grade: "1",
-        userName: "zhuwencheng"
-      };
+    edit(item) {
+      this.currentUser = JSON.parse(JSON.stringify(item));
       this.addUserModel = true;
     },
-    add(){
+    add() {
       this.currentUser = null;
       this.addUserModel = true;
     },
-    queryFilter(){
-      this.$Message.success("进行查询！");
+    queryFilter(isFilter) {
+      const _this = this;
+      isFilter ? (_this.filterParams.page_num = 1) : "";
+      _this.$Spin.show();
+      this.$http
+        .post("/api/users/member/list", _this.filterParams)
+        //.post("http://erp.ipaynow.cn/users/login", params)
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.tableData = result.object.object;
+            _this.total = result.object.totalRecord;
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
     }
   },
   mounted() {
     console.log(this.tableData);
+  },
+  created() {
+    this.queryFilter();
   }
 };
 </script>

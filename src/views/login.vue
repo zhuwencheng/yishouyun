@@ -6,20 +6,20 @@
    <div class="l-bj">
             <div class="login" @keydown.enter="handleSubmit">
                 <Form ref="loginForm" :model="form" :rules="rules">
-                    <FormItem prop="phone" class="reset-ivu-form-item">
+                    <FormItem prop="mchCode" class="reset-ivu-form-item">
                         <div class="xz-form-group">
                             <label>
                                 门店手机号
                             </label>
-                            <input type="text" v-model="form.phone"/>
+                            <input type="text" v-model="form.mchCode" maxlength="11"/>
                         </div>
                     </FormItem>
-                    <FormItem prop="userName" class="reset-ivu-form-item">
+                    <FormItem prop="account" class="reset-ivu-form-item">
                         <div class="xz-form-group">
                             <label>
                                 帐号
                             </label>
-                            <input type="text" v-model="form.userName"/>
+                            <input type="text" v-model="form.account" maxlength="11"/>
                         </div>
                     </FormItem>
                     <FormItem prop="password" class="reset-ivu-form-item">
@@ -27,7 +27,7 @@
                             <label>
                                 密码
                             </label>
-                            <input type="password" v-model="form.password"/>
+                            <input type="password" v-model="form.password" maxlength="16"/>
                         </div>
                     </FormItem>
                     <div class="xz-form-group">
@@ -58,9 +58,9 @@ export default {
   data() {
     return {
       form: {
-        userName: "",
+        account: "",
         password: "",
-        phone: "",
+        mchCode: "",
         system: "0"
       },
       selectOptions: [
@@ -69,7 +69,7 @@ export default {
         { label: "会员管理", value: "2" }
       ],
       rules: {
-        phone: [
+        mchCode: [
           {
             required: true,
             message: "请填写正确格式的手机号",
@@ -77,9 +77,7 @@ export default {
             trigger: "blur"
           }
         ],
-        userName: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
-        ],
+        account: [{ required: true, message: "账号不能为空", trigger: "blur" }],
         password: [
           { required: true, message: "请填写6-20位的密码", trigger: "blur" }
         ]
@@ -88,18 +86,36 @@ export default {
   },
   methods: {
     handleSubmit() {
+      const _this = this;
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          Cookies.set("user", this.form.userName);
-          Cookies.set("password", this.form.password);
-          this.$router.push({
-            name: "shoplist"
-          });
+          _this.$Spin.show();
+          const params = _this.form;
+          this.$http
+            .post("/api/users/login", params)
+            //.post("http://erp.ipaynow.cn/users/login", params)
+            .then(function(res) {
+              const result = res.data;
+              if (result.code === "200") {
+                _this.$Spin.hide();
+                sessionStorage.token = result.object.phone;
+                _this.$router.push({
+                  name: "shoplist"
+                });
+              } else {
+                _this.$Spin.hide();
+                _this.$Message.error(result.message);
+              }
+            })
+            .catch(function(error) {
+              _this.$Spin.hide();
+              _this.$Message.error("网络异常！");
+            });
         }
       });
     }
   },
-  created(){
+  created() {
     //console.log(this.$http);
   }
 };
