@@ -93,7 +93,6 @@ export default {
           const params = _this.form;
           this.$http
             .post("/api/users/login", params)
-            //.post("http://erp.ipaynow.cn/users/login", params)
             .then(function(res) {
               const result = res.data;
               if (result.code === "200") {
