@@ -76,12 +76,10 @@ export default {
             trigger: "blur"
           }
         ],
-        memberBirthday: [
-          { required: true, message: "请填写生日"}
-        ],
-        memberLevelId: [
-          { required: true, message: "请设置等级", trigger: "blur" }
-        ],
+        // memberBirthday: [{ required: true, message: "请填写生日" }],
+        // memberLevelId: [
+        //   { required: true, message: "请设置等级", trigger: "blur" }
+        // ],
         memberName: [
           { required: true, message: "请填写用户名", trigger: "blur" }
         ]
@@ -99,27 +97,72 @@ export default {
 
   methods: {
     handleSubmit() {
-      this.$refs.editUserForm.validate(valid => {
+      const _this = this;
+      _this.$refs.editUserForm.validate(valid => {
         if (valid) {
-          this.$Message.success("成功提示！");
+          _this.$Spin.show();
+          if (!_this.form.memberId) {
+            _this.addMember();
+          } else {
+            _this.editMember();
+          }
         }
       });
     },
-  },
-  watch:{
-      userData:function(){
-        if(this.userData){
-           this.form=JSON.parse(JSON.stringify(this.userData));
-        }else{
-          this.form={
-            memberPhone: "",
-            memberBirthday: "",
-            memberLevelId: "",
-            memberName: ""
+    addMember() {
+      const _this = this;
+      _this.$http
+        .post("/api/users/member/save", _this.form)
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$emit('success',false);
+            _this.$Spin.hide();
+            _this.$Message.success('新增成功！');
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
           }
-        }
-         
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+    },
+    editMember() {
+      const _this = this;
+      _this.$http
+        .post("/api/users/member/update", _this.form)
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Message.success('修改成功！');
+            _this.$Spin.hide();
+            _this.$emit('success',true);
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+    }
+  },
+  watch: {
+    userData: function() {
+      if (this.userData) {
+        this.form = JSON.parse(JSON.stringify(this.userData));
+      } else {
+        this.form = {
+          memberPhone: "",
+          memberBirthday: "",
+          memberLevelId: "",
+          memberName: ""
+        };
       }
+    }
   },
   mounted() {
     //console.log(this.currentUser,222);

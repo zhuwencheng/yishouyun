@@ -4,7 +4,7 @@
 <template>
     <div class="main">
         <div class="uc-topNav">
-            <div class="logo">LOGO</div>
+            <div class="logo"></div>
             <ul>
                 <li><router-link to="/shoplist"><em class="nav-icon icon1"></em><span>收银台</span></router-link></li>
                 <li><router-link to="/ordermanage"><em class="nav-icon icon2"></em><span>订单管理</span></router-link></li>

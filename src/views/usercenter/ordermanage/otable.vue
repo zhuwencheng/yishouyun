@@ -14,15 +14,23 @@
             <div class="th">交易状态</div>
             <div class="th">操作</div>
         </div>
-        <div class="tr" v-for="(item) in tabledata" :key="item.orderNo">
-            <div class="td">{{item.time}}</div>
-            <div class="td">{{item.mcode}}</div>
-            <div class="td">{{item.orderNo}}</div>
-            <div class="td">{{item.phone}}</div>
-            <div class="td">{{item.type}}</div>
-            <div class="td">{{item.price}}</div>
-            <div class="td">{{item.status}}</div>
-            <div class="td toolbtn"><span @click="readDetail(item)">查看详情</span><span @click="print(item)">补打</span></div>
+        <div class="tr" v-for="(item) in tabledata" :key="item.orderNumber">
+            <div class="td">{{item.createTime}}</div>
+            <div class="td">{{item.account}}</div>
+            <div class="td">{{item.orderNumber}}</div>
+            <div class="td">{{item.memberPhone}}</div>
+            <div class="td">{{item.paywayName}}</div>
+            <div class="td">{{item.orderAmount}}</div>
+            <div class="td">
+                <span v-if="item.orderStatus===0" class="blue">进行中</span>
+                <span v-if="item.orderStatus===1">成功</span>
+                <span v-if="item.orderStatus===2" class="blue">取消订单</span>
+                <span v-if="item.orderStatus===3" class="red">支付异常</span>    
+            </div>
+            <div class="td toolbtn">
+                <span @click="readDetail(item)">查看详情</span>
+                <span @click="print(item)" :class="{disabled:item.orderStatus===1}">补打</span>
+            </div>
         </div>
     </div>
     
@@ -37,7 +45,7 @@ export default {
   props: ["tabledata"],
   methods: {
       readDetail(item){
-          this.$emit('readMore');
+          this.$emit('readMore',item);
       },
       print(item){
           this.$Message.success("补打内容");

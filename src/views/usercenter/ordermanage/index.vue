@@ -8,19 +8,25 @@
             <div class="form-set">
                 <div class="form-group">
                     <label>交易流水号</label>
-                    <input type="text" v-model="filterParams.orderNo" />
+                    <input type="text" v-model="filterParams.orderNumber" />
                 </div>
                  <div class="form-group">
                     <label>会员手机号</label>
-                    <input type="text" v-model="filterParams.phone" />
+                    <input type="text" v-model="filterParams.memberPhone" />
                 </div>
                  <div class="form-group">
                     <label>交易方式</label>
-                    <XzSelect v-model="filterParams.payType" :options="typeSelectOptions" class="o-select"></XzSelect>
+                    <Select v-model="filterParams.paywayCode" style="width:200px">
+                        <Option v-for="item in typeSelectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                    <!-- <XzSelect v-model="filterParams.paywayCode" :options="typeSelectOptions" class="o-select"></XzSelect> -->
                 </div>
                  <div class="form-group">
                     <label>交易状态</label>
-                    <XzSelect v-model="filterParams.orderStatus" :options="statusSelectOptions" class="o-select"></XzSelect>
+                    <Select v-model="filterParams.orderStatus" style="width:200px">
+                        <Option v-for="item in statusSelectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                    <!-- <XzSelect v-model="filterParams.orderStatus" :options="statusSelectOptions" class="o-select"></XzSelect> -->
                 </div>
             </div>
             <div class="form-set">
@@ -34,7 +40,7 @@
                 </div> -->
                  <div class="form-group">
                     <label>门店</label>
-                    <input type="text" v-model="filterParams.storeNo">
+                    <input type="text" v-model="filterParams.account">
                 </div>
                 <div class="form-group n-b">
                     <!-- <label>门店</label>
@@ -42,13 +48,13 @@
                 </div>
                  <div class="form-group n-b">
                     <Button type="ghost">统计</Button>
-                   <Button type="primary" @click="queryFilter">查询</Button>
+                   <Button type="primary" @click="queryFilter(true)">查询</Button>
                 </div>
             </div>
         </div>
         <div class="content">
             <OTable :tabledata="tableData" @readMore="readOrderDetail"></OTable>
-            <Page :total="total" show-elevator class="page" :current="filterParams.pageIndex" @on-change="changePage"></Page>
+            <Page :total="total" :page-size="filterParams.page_size" show-elevator class="page" :current="filterParams.page_num" @on-change="changePage"></Page>
         </div>
         <!-- 订单详情 -->
         <Modal v-model="orderDetailModel" class="xz-model bl-header">
@@ -56,46 +62,57 @@
               订单详情
             </p>
             <div class="orderDetail">
-              <table>
+              <table v-if="orderInfo">
                 <tr>
-                  <td class="w30">交椅门店号</td>
-                  <td>13567890086755</td>
+                  <td class="w30">交易门店号</td>
+                  <td>{{orderInfo.account}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易时间</td>
-                  <td>2018.4.22 16:32</td>
+                  <td>{{orderInfo.createTime}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易流水号</td>
-                  <td>12345678900</td>
+                  <td>{{orderInfo.orderNumber}}</td>
                 </tr>
                 <tr>
                   <td class="w30">会员手机号</td>
-                  <td>1243566879</td>
+                  <td>{{orderInfo.memberPhone}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易方式</td>
-                  <td>微信</td>
+                  <td>{{orderInfo.paywayName}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易金额</td>
-                  <td>36.00</td>
+                  <td>{{orderInfo.orderAmount.toFixed(2)}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易状态</td>
-                  <td>成功</td>
+                  <td>
+                    <span v-if="orderInfo.orderStatus===0" class="blue">进行中</span>
+                    <span v-if="orderInfo.orderStatus===1">成功</span>
+                    <span v-if="orderInfo.orderStatus===2" class="blue">取消订单</span>
+                    <span v-if="orderInfo.orderStatus===3" class="red">支付异常</span>    
+                  </td>
                 </tr>
                 <tr>
                   <td class="w30">已购商品</td>
-                  <td>招牌奶茶（冰）*2</td>
+                  <td class="goodslist">
+                    <p v-for="item in orderItems" :key="item.orderId">
+                        {{item.goodsName}}<span v-if="item.remark">（{{item.remark}}）</span>*{{item.goodsNumber}}
+                    </p>
+                  </td>
                 </tr>
                 <tr>
                   <td class="w30">优惠详情</td>
-                  <td></td>
+                  <td>
+                    {{(orderInfo.orderAmount-orderInfo.payAmount).toFixed(2)}}
+                  </td>
                 </tr>
                 <tr>
                   <td class="w30">备注</td>
-                  <td></td>
+                  <td>{{orderInfo.remark}}</td>
                 </tr>
               </table>
             </div>
@@ -118,85 +135,127 @@ export default {
   },
   data() {
     return {
-      orderDetailModel:false,
-      currentOrder:null,
-      total:53,
+      orderDetailModel: false,
+      orderInfo: null,
+      orderItems:null,
+      total: 53,
       filterParams: {
-        pageIndex: 1,
-        orderNo: "",
-        phone: "",
-        payType: "",
+        page_num: 1,
+        orderNumber: "",
+        page_size: 6,
+        memberPhone: "",
+        paywayCode: "",
         orderStatus: "",
         dateArea: [],
-        storeNo: ""
+        account: ""
       },
-      tableData: [
-        {
-          time: "2017-01-01 16:22",
-          mcode: "142133253252",
-          orderNo: "asdfdsafdsafdasfds",
-          phone: "15927216320",
-          type: "微信",
-          price: "36.00",
-          status: "成功"
-        }
-      ],
+      tableData: [],
       typeSelectOptions: [
-        { label: "全部", value: "0" },
-        { label: "微信", value: "1" },
-        { label: "支付宝", value: "2" },
-        { label: "银行卡", value: "3" },
-        { label: "现金", value: "4" }
+        { label: "全部", value: "" },
+        { label: "微信", value: "weixin" },
+        { label: "支付宝", value: "aliPay" },
+        { label: "银行卡", value: "bankCard" },
+        { label: "现金", value: "cash" },
+        { label: "其他支付", value: "others" }
       ],
       statusSelectOptions: [
-        { label: "全部", value: "0" },
-        { label: "已完成", value: "1" },
-        { label: "交易异常", value: "2" },
-        { label: "取消订单", value: "3" }
+        { label: "全部", value: "" },
+        { label: "进行中", value: 0 },
+        { label: "已完成", value: 1 },
+        { label: "交易异常", value: 3 },
+        { label: "取消订单", value: 2 }
       ]
     };
   },
   methods: {
-    changePage() {
-      console.log("页数改变");
+    changePage(pageIndex) {
+      const _this = this;
+      _this.filterParams.page_num = pageIndex;
+      _this.queryFilter();
     },
-    readOrderDetail(item){
-      this.orderDetailModel=true;
+    readOrderDetail(item) {
+      const _this = this;
+      _this.$Spin.show();
+      _this.$http
+        .post("/api/users/orderItem/detailList",{
+          orderId:item.orderId
+        })
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.orderInfo=result.object.orderInfo;
+            _this.orderItems=result.object.orderItems;
+            _this.orderDetailModel=true;
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+      //this.orderDetailModel = true;
     },
-    queryFilter(){
-      this.$Message.success("进行查询！");
+    queryFilter(isFilter) {
+      const _this = this;
+      isFilter ? (_this.filterParams.page_num = 1) : "";
+      _this.$Spin.show();
+      this.$http
+        .post("/api/users/orderinfo/list", _this.filterParams)
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.tableData = result.object.object;
+            _this.total = result.object.totalRecord;
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
     }
   },
   mounted() {
     console.log(this.tableData);
+  },
+  created() {
+    const _this = this;
+    _this.queryFilter();
   }
 };
 </script>
 
 <style>
-.xz-model .ivu-modal-footer{
+.xz-model .ivu-modal-footer {
   border-top: 0;
   font-style: 16px;
   padding: 12px 58px 30px;
-} 
-.xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
-  color: #058FFF;
 }
-.xz-model .ivu-btn-large{
+.xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
+  color: #058fff;
+}
+.xz-model .ivu-btn-large {
   padding: 12px 15px 12px;
   font-size: 16px;
 }
-.ivu-tooltip-inner{
+.ivu-tooltip-inner {
   color: #333;
   background: #fff;
 }
-.ivu-tooltip-popper[x-placement^=bottom] .ivu-tooltip-arrow{
+.ivu-tooltip-popper[x-placement^="bottom"] .ivu-tooltip-arrow {
   border-bottom-color: #ccc;
 }
-.ivu-scroll-wrapper,.ivu-scroll-container{
+.ivu-scroll-wrapper,
+.ivu-scroll-container {
   height: 100%;
 }
-.bl-header .ivu-modal-header{
+.bl-header .ivu-modal-header {
   background: #058fff;
   color: #fff;
   text-align: center;
@@ -205,21 +264,21 @@ export default {
   border-bottom: 0;
 }
 .bl-header .ivu-modal-close .ivu-icon-ios-close-empty {
-    color: #fff;
+  color: #fff;
 }
-.o-dhead{
+.o-dhead {
   font-size: 20px !important;
   color: #fff !important;
   line-height: 40px !important;
   height: 40px !important;
 }
-.o-dhead em{
-  font-size:16px;
+.o-dhead em {
+  font-size: 16px;
 }
-.bl-header .ivu-modal-close{
+.bl-header .ivu-modal-close {
   top: 18px;
 }
-.o-dhead .l-icon{
+.o-dhead .l-icon {
   width: 30px;
   height: 30px;
   vertical-align: middle;
@@ -227,7 +286,7 @@ export default {
   margin-right: 10px;
   display: inline-block;
 }
-.btw-footer{
+.btw-footer {
   display: flex;
   justify-content: space-between;
 }

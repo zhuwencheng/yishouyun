@@ -10,7 +10,7 @@
         height: 200px;
         padding: 30px 60px;
         background: #fff;
-        font-size: 20px;
+        font-size: 16px;
         .form-set{
             display: flex;
             justify-content: space-between;
@@ -64,15 +64,28 @@
         right: 60px;
     }
     .table{
+        .blue{
+            color: #058FFF;
+        }
+        .red{
+            color: #FF514D;
+        }
         .tr{
             display: table;
             width: 100%;
             line-height: 75px;
             text-align: center;
+            table-layout: fixed;
             .th,.td{
                 display: table-cell;
-                font-size: 20px;
+                font-size: 16px;
+                &.td{
+                    font-size: 14px;
+                }
                 width: 9.5%;
+                &.td{
+                    font-size: 14px;
+                }
                 &:last-child{
                     width: 15%;
                 }
@@ -88,6 +101,11 @@
                     color: #fff;
                     margin: 0 15px;
                     cursor: pointer;
+                    &.disabled{
+                        background: #ccc;
+                        color: #fff;
+                        cursor: not-allowed;
+                    }
                    }
                 }
             }
@@ -102,15 +120,21 @@
     padding: 20px 40px;
     table{
         width: 100%;
-        line-height: 50px;
+        line-height: 30px;
         table-layout: fixed;
         border-collapse: collapse;
         border-spacing: 0px;
+        vertical-align: middle;
         td{
             border:1px solid #d5d5db;
-            padding-left: 20px;
+            padding: 10px 0 10px 20px;
+            vertical-align: middle;
+
             &.w30{
                 width: 30%;
+            }
+            &.goodslist{
+                line-height: 2em;
             }
         }
     }

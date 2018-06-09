@@ -58,7 +58,7 @@
                <p slot="header" class="o-dhead">
                   新增/修改会员
               </p>
-              <AddUser :userData="currentUser"></AddUser>
+              <AddUser :userData="currentUser" @success="editSuc"></AddUser>
               <div slot="footer"></div>
           </Modal>
     </div>
@@ -112,7 +112,12 @@ export default {
       this.addUserModel = true;
     },
     add() {
-      this.currentUser = null;
+      this.currentUser = {
+          memberPhone: "",
+          memberBirthday: "",
+          memberLevelId: "",
+          memberName: ""
+        };
       this.addUserModel = true;
     },
     queryFilter(isFilter) {
@@ -137,6 +142,15 @@ export default {
           _this.$Spin.hide();
           _this.$Message.error("网络异常！");
         });
+    },
+    editSuc(type){
+      const _this=this;
+      _this.addUserModel=false;
+      if(type){
+        _this.queryFilter();
+      }else{
+        window.location.reload();
+      }
     }
   },
   mounted() {

@@ -6,22 +6,22 @@
     <div class="shoplist">
         <ShopCart :show="shopCartShow" @hide="shopCartShow=false" @submit="cartBalance"></ShopCart>
         <div class="leftmenu">
-            <dl v-for="(item,i) in menuList" :key="i"  :class="{active:item.checked}">
-                <dt @click="changeMenu(item)">{{item.title}}<em></em></dt>
-                <dd v-for="(litem,index) in item.children" :key="index+'asdb'">{{litem.title}}</dd>
+            <dl v-for="(item) in menuList" :key="item.id"  :class="{active:item.checked}">
+                <dt @click="changeMenu(item)">{{item.name}}<em></em></dt>
+                <dd v-for="(litem) in item.childList" :key="litem.id" @click="filterMenu(litem.id)">{{litem.name}}</dd>
             </dl>
         </div>
         <div class="ct">
             <div class="shopcart" @click="shopCartShow=true"></div>
             <div class="search">
-                <input type="text" placeholder="搜索" />
+                <input type="text" placeholder="搜索" v-model="menuFilter.searchKey" @keyup.enter="filterSearch"/>
             </div>
             <div class="bd">
-                 <Scroll :on-reach-bottom="handleReachBottom" :distance-to-edge='distance' :height="scrollHeight">
+                 <Scroll :on-reach-bottom="handleReachBottom" :distance-to-edge='distance' :height="scrollHeight" v-if="shopList.length>0">
                     <dl class="card" v-for="item in shopList" :key="item.id" @click="selectShop(item)">
-                        <dt><img :src="item.imgUrl" /></dt>
-                        <dd>{{item.title}}</dd>
-                        <dd class="price">￥{{item.price.toFixed(1)}}</dd>
+                        <dt><img :src="item.primaryPicUrl" /></dt>
+                        <dd>{{item.goodsName}}</dd>
+                        <dd class="price">￥{{item.salePrice.toFixed(1)}}</dd>
                     </dl>
                  </Scroll>
             </div>
@@ -110,79 +110,17 @@ export default {
       showPayResult: false,
       addUserModel: false,
       scrollHeight: "100%",
-      shopCartData: {
-        shopData: [
-          {
-            shopNo: "",
-            num: "",
-            remarks: [],
-            shopName: ""
-          }
-        ],
-        buyer:'',
-        orderDes:''
+      //查询条件
+      menuFilter: {
+        page_num: 1,
+        categoryId: null,
+        searchKey: "",
+        page_size: 15
       },
-      menuList: [
-        {
-          title: "果茶系列",
-          children: [
-            {
-              title: "子类1",
-              id: "001"
-            },
-            {
-              title: "子类2",
-              id: "001"
-            },
-            {
-              title: "子类3",
-              id: "001"
-            }
-          ]
-        },
-        {
-          title: "果茶系列2",
-          children: [
-            {
-              title: "子类1",
-              id: "001"
-            },
-            {
-              title: "子类2",
-              id: "001"
-            },
-            {
-              title: "子类3",
-              id: "001"
-            }
-          ]
-        },
-        {
-          title: "果茶系列3",
-          children: [
-            {
-              title: "子类1",
-              id: "001"
-            },
-            {
-              title: "子类2",
-              id: "001"
-            },
-            {
-              title: "子类3",
-              id: "001"
-            }
-          ]
-        }
-      ],
-      shopList: Array.apply(null, { length: 20 }).map((item, index) => {
-        return {
-          imgUrl: "http://placeholder.qiniudn.com/270x270",
-          id: index,
-          price: 20 + index,
-          title: "招牌奶茶" + index
-        };
-      }),
+      //查询条件end
+      isEnd: false,
+      menuList: [], //菜单数据
+      shopList: [], //商品数据
       specCardData: {
         shopTitle: "01-招牌奶茶",
         num: 1,
@@ -204,7 +142,12 @@ export default {
       }
     },
     handleReachBottom() {
-      console.log(111);
+      const _this=this;
+      if(_this.isEnd){
+         _this.$Message.warning('已没有更多的内容了！');
+      }else{
+        _this.menuFilter=_this.menuFilter+1;
+      }
     },
     selectShop() {
       this.showShopCard = true;
@@ -224,9 +167,82 @@ export default {
     selectPayType() {
       this.showPayType = false;
       this.showPayResult = true;
+    },
+    filterMenu(id) {
+      const _this = this;
+      //_this.menuFilter.categoryId = id;
+      _this.menuFilter.page_num = 1;
+      _this.menuFilter.searchKey = "";
+      _this.isEnd = false;
+      _this.queryList(true);
+    },
+    filterSearch() {
+      const _this = this;
+      _this.menuFilter.page_num = 1;
+      _this.isEnd = false;
+      _this.queryList(true);
+    },
+    queryList(isFirst) {
+      //商品列表查询
+      const _this = this;
+      _this.$Spin.show();
+      return new Promise(resolve => {
+        _this.$http
+          .post("/api/users/goods/list", _this.menuFilter)
+          .then(function(res) {
+            const result = res.data;
+            if (result.code === "200") {
+              _this.$Spin.hide();
+              if (result.object.totalPage == result.object.currentPage) {
+                _this.isEnd = true;
+              }
+              if (isFirst) {
+                _this.shopList = result.object.object;
+              } else {
+                _this.shopList.push(result.object.object);
+              }
+            } else {
+              _this.$Spin.hide();
+              _this.$Message.error(result.message);
+            }
+            resolve();
+          })
+          .catch(function(error) {
+            _this.$Spin.hide();
+            _this.$Message.error("网络异常！");
+            resolve();
+          });
+      });
+    },
+    queryMenu() {
+      //菜单查询
+      const _this = this;
+      _this.$Spin.show();
+      _this.$http
+        .post("/api/users/goods/category/list")
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.menuList = result.object;
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
     }
   },
-  mounted() {}
+  mounted() {
+    const _this=this;
+    this.queryMenu();
+    window.setTimeout(function(){
+      _this.queryList(true)
+    },1000);
+  }
 };
 </script>
 
