@@ -16,14 +16,14 @@
                 </div>
                  <div class="form-group">
                     <label>交易方式</label>
-                    <Select v-model="filterParams.paywayCode" style="width:200px">
+                    <Select v-model="filterParams.paywayCode" class="auto-com">
                         <Option v-for="item in typeSelectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                     <!-- <XzSelect v-model="filterParams.paywayCode" :options="typeSelectOptions" class="o-select"></XzSelect> -->
                 </div>
                  <div class="form-group">
                     <label>交易状态</label>
-                    <Select v-model="filterParams.orderStatus" style="width:200px">
+                    <Select v-model="filterParams.orderStatus" class="auto-com">
                         <Option v-for="item in statusSelectOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                     <!-- <XzSelect v-model="filterParams.orderStatus" :options="statusSelectOptions" class="o-select"></XzSelect> -->
@@ -32,7 +32,7 @@
             <div class="form-set">
                 <div class="form-group">
                     <label>时间范围</label>
-                    <DatePicker type="daterange" v-model="filterParams.dateArea" placeholder="选择时间范围"></DatePicker>
+                    <DatePicker type="daterange" v-model="filterParams.dateArea" placeholder="选择时间范围" class="auto-com" :options="dateOptions"></DatePicker>
                 </div>
                  <!-- <div class="form-group">
                     <label>结束时间</label>
@@ -47,7 +47,7 @@
                     <input type="text"> -->
                 </div>
                  <div class="form-group n-b">
-                    <Button type="ghost">统计</Button>
+                    <!-- <Button type="ghost">统计</Button> -->
                    <Button type="primary" @click="queryFilter(true)">查询</Button>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 </tr>
                 <tr>
                   <td class="w30">交易时间</td>
-                  <td>{{orderInfo.createTime}}</td>
+                  <td>{{orderInfo.createTimeStr}}</td>
                 </tr>
                 <tr>
                   <td class="w30">交易流水号</td>
@@ -117,7 +117,7 @@
               </table>
             </div>
             <div slot="footer">
-              <Button size="large" type="primary" long >保存</Button>
+              <Button size="large" type="primary" long @click="orderDetailModel=false">确认</Button>
             </div>
         </Modal>
     </div>
@@ -137,21 +137,26 @@ export default {
     return {
       orderDetailModel: false,
       orderInfo: null,
-      orderItems:null,
+      orderItems: null,
       total: 53,
       filterParams: {
         page_num: 1,
         orderNumber: "",
-        page_size: 6,
+        page_size: Math.floor((document.body.clientHeight - 380) / 50),
         memberPhone: "",
         paywayCode: "",
         orderStatus: "",
         dateArea: [],
         account: ""
       },
+      dateOptions: {
+        disabledDate(date) {
+          return date && date.valueOf() > Date.now();
+        }
+      },
       tableData: [],
       typeSelectOptions: [
-        { label: "全部", value: "" },
+        { label: "全部", value: "100" },
         { label: "微信", value: "weixin" },
         { label: "支付宝", value: "aliPay" },
         { label: "银行卡", value: "bankCard" },
@@ -159,7 +164,7 @@ export default {
         { label: "其他支付", value: "others" }
       ],
       statusSelectOptions: [
-        { label: "全部", value: "" },
+        { label: "全部", value: "100" },
         { label: "进行中", value: 0 },
         { label: "已完成", value: 1 },
         { label: "交易异常", value: 3 },
@@ -177,16 +182,16 @@ export default {
       const _this = this;
       _this.$Spin.show();
       _this.$http
-        .post("/api/users/orderItem/detailList",{
-          orderId:item.orderId
+        .post("/api/users/orderItem/detailList", {
+          orderId: item.orderId
         })
         .then(function(res) {
           const result = res.data;
           if (result.code === "200") {
             _this.$Spin.hide();
-            _this.orderInfo=result.object.orderInfo;
-            _this.orderItems=result.object.orderItems;
-            _this.orderDetailModel=true;
+            _this.orderInfo = result.object.orderInfo;
+            _this.orderItems = result.object.orderItems;
+            _this.orderDetailModel = true;
           } else {
             _this.$Spin.hide();
             _this.$Message.error(result.message);
@@ -235,13 +240,13 @@ export default {
 .xz-model .ivu-modal-footer {
   border-top: 0;
   font-style: 16px;
-  padding: 12px 58px 30px;
+  padding: 0 56px 25px;
 }
 .xz-model .ivu-modal-close .ivu-icon-ios-close-empty {
   color: #058fff;
 }
 .xz-model .ivu-btn-large {
-  padding: 12px 15px 12px;
+  padding: 8px 15px 8px;
   font-size: 16px;
 }
 .ivu-tooltip-inner {
@@ -267,16 +272,16 @@ export default {
   color: #fff;
 }
 .o-dhead {
-  font-size: 20px !important;
+  font-size: 16px !important;
   color: #fff !important;
-  line-height: 40px !important;
-  height: 40px !important;
+  line-height: 25px !important;
+  height: 25px !important;
 }
 .o-dhead em {
   font-size: 16px;
 }
 .bl-header .ivu-modal-close {
-  top: 18px;
+  top: 11px;
 }
 .o-dhead .l-icon {
   width: 30px;

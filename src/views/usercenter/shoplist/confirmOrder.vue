@@ -3,72 +3,49 @@
 </style>
 
 <template>
-    <div class="confirmOrder">
-        <div class="hd"><hr><small class="left"></small><small class="right"></small><em></em>奶茶小店 <span>（西直门凯德MAL店）</span></div>
+    <div class="confirmOrder" v-if="orderData">
+        <div class="hd"><hr><small class="left"></small><small class="right"></small><em></em>{{title}}</div>
         <div class="form-group">
           <label>会员手机号：</label>
-          <span>张翠山 15927216320</span>
+          <span>{{orderData.orderInfo.memberName}} {{orderData.orderInfo.memberPhone}}</span>
         </div>
         <div class="form-group">
           <label>下单时间：</label>
-          <span>2018.04.45 14:22</span>
+          <span>{{orderData.orderInfo.createTimeStr}}</span>
         </div>
         <div class="form-group">
           <label>备注</label>
-          <textarea>酸酸的股东广东省的根深蒂固</textarea>
+          <textarea :value="orderData.orderInfo.remark"></textarea>
         </div>
         <h4><span>已购商品</span><em></em></h4>
         <div class="detail">
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
-          <dl>
-            <dt>招牌奶茶</dt>
-            <dd>2</dd>
-            <dd class="money">36.00</dd>
-          </dl>
+            <dl v-for="(item,i) in orderData.orderItems" :key="i">
+              <dt>{{item.goodsName}}</dt>
+              <dd>{{item.goodsNumber}}</dd>
+              <dd class="money">{{item.goodsAmount.toFixed(2)}}</dd>
+            </dl>
         </div>
-        <div class="total">合计：<span>36.00元</span></div>
+        <div class="total">合计：<span>{{orderData.orderInfo.payAmount.toFixed(2)}}元</span></div>
     </div>
     
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      title: "奶茶小店"
+    };
   },
-  props: ["value"],
+  props: ["orderData"],
+  computed: {
+    ...mapGetters("app", ["shopCartDone", "shopCartNum", "totalMoney"])
+  },
   methods: {},
-  mounted() {}
+  mounted() {},
+  created() {}
 };
 </script>
 

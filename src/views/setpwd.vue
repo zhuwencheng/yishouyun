@@ -10,17 +10,17 @@
             <FormItem prop="password" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
-                        重新设置密码
+                        重新设置密码：
                     </label>
-                    <input type="text" v-model="form.password"/>
+                    <input type="password" v-model="form.password"/>
                 </div>
             </FormItem>
             <FormItem prop="rePassword" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
-                        确认密码
+                        确认密码：
                     </label>
-                    <input type="text" v-model="form.rePassword"/>
+                    <input type="password" v-model="form.rePassword"/>
                 </div>
             </FormItem>
             <div class="submit" @click="handleSubmit">
@@ -83,7 +83,7 @@ export default {
               const result = res.data;
               if (result.code === "200") {
                 _this.$Spin.hide();
-                _this.$Message.success("修改密码成功！");
+                _this.$Message.success("注册成功！");
                 setTimeout(function() {
                   _this.$router.push({
                     name: "login"

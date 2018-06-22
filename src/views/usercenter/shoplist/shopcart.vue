@@ -6,7 +6,7 @@
     <div class="scart" v-show="show">
         <div class="mask" @click="hide"></div>
         <div class="wrapper">
-          <div class="hd"><em></em>购物车{{shopCartDone[0].shopTitle}}</div>
+          <div class="hd"><em></em>购物车</div>
           <div class="thw">
             <span class="t-1">序号</span>
             <span class="t-2">名称</span>
@@ -16,24 +16,24 @@
             <span class="t-6">备注</span>
           </div>
           <div class="bd">
-            <div class="tdw">
-              <div class="t-1">01</div>
-              <div class="t-2">招牌奶茶</div>
-              <div class="t-3">18</div>
-              <div class="t-4"><InputNumber v-model="num" @change="changeNum"/></div>
-              <div class="t-5">36</div>
+            <div class="tdw" v-for="(item,i) in shopCartDone" :key="i">
+              <div class="t-1">{{i+1}}</div>
+              <div class="t-2" :title="item.goodsName">{{item.goodsName}}</div>
+              <div class="t-3">{{item.salePrice}}</div>
+              <div class="t-4"><InputNumber v-model="item.num" @change="changeNum"/></div>
+              <div class="t-5">{{(item.salePrice*item.num).toFixed(2)}}</div>
               <div class="t-6">
-                <Tooltip content="01招牌奶茶 冰/少糖" placement="bottom-end">
-                    冰/少糖
+                <Tooltip :content="i+' '+item.goodsName+' '+item.remarkText.join('/')" placement="bottom-end">
+                    {{item.remarkText[0]}}
                 </Tooltip>
-                <em class="delete" title="删除">×</em>
+                <em class="delete" title="删除" @click="deleteShopItem(i)">×</em>
               </div>
             </div>
           </div>
           <dl class="f-tool">
-            <dt><Button type="primary" long size="large" @click="submit">下单</Button></dt>
-            <dd class="total-money">￥36</dd>
-            <dd class="total-num">商品合计2件</dd>
+            <dt><Button type="primary" long size="large" @click="submit" v-if="shopCartNum>0">下单</Button></dt>
+            <dd class="total-money">￥{{totalMoney.toFixed(2)}}</dd>
+            <dd class="total-num">商品合计{{shopCartNum}}件</dd>
           </dl>
         </div>
     </div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions ,mapState} from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import InputNumber from "../../my-components/InputNumber"; //新增用户配置
 export default {
   components: {
@@ -61,11 +61,15 @@ export default {
       this.$emit("submit");
     },
     changeNum() {
-      console.log(123);
-    }
+      //console.log(123);
+    },
+    ...mapActions('app',['deleteShopItem'])
   },
   computed: {
-    ...mapGetters("app", ['shopCartDone','shopCartNum'])
+    ...mapGetters("app", ["shopCartDone", "shopCartNum", "totalMoney"])
+  },
+  mounted() {
+    console.log("111");
   }
 };
 </script>

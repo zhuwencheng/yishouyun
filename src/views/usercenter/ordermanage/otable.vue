@@ -15,12 +15,12 @@
             <div class="th">操作</div>
         </div>
         <div class="tr" v-for="(item) in tabledata" :key="item.orderNumber">
-            <div class="td">{{item.createTime}}</div>
-            <div class="td">{{item.account}}</div>
-            <div class="td">{{item.orderNumber}}</div>
-            <div class="td">{{item.memberPhone}}</div>
-            <div class="td">{{item.paywayName}}</div>
-            <div class="td">{{item.orderAmount}}</div>
+            <div class="td" :title="item.createTimeStr">{{item.createTimeStr}}</div>
+            <div class="td" :title="item.account">{{item.account}}</div>
+            <div class="td" :title="item.orderNumber">{{item.orderNumber}}</div>
+            <div class="td" :title="item.memberPhone">{{item.memberPhone}}</div>
+            <div class="td" :title="item.paywayName">{{item.paywayName}}</div>
+            <div class="td" :title="item.orderAmount">{{item.orderAmount}}</div>
             <div class="td">
                 <span v-if="item.orderStatus===0" class="blue">进行中</span>
                 <span v-if="item.orderStatus===1">成功</span>
@@ -29,7 +29,7 @@
             </div>
             <div class="td toolbtn">
                 <span @click="readDetail(item)">查看详情</span>
-                <span @click="print(item)" :class="{disabled:item.orderStatus===1}">补打</span>
+                <span @click="print(item)" :class="{disabled:item.orderStatus!==1}">补打</span>
             </div>
         </div>
     </div>

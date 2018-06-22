@@ -6,54 +6,57 @@
     <div class="shoplist">
         <ShopCart :show="shopCartShow" @hide="shopCartShow=false" @submit="cartBalance"></ShopCart>
         <div class="leftmenu">
-            <dl v-for="(item) in menuList" :key="item.id"  :class="{active:item.checked}">
-                <dt @click="changeMenu(item)">{{item.name}}<em></em></dt>
-                <dd v-for="(litem) in item.childList" :key="litem.id" @click="filterMenu(litem.id)">{{litem.name}}</dd>
-            </dl>
+            <div class="content">
+              <dl v-for="(item) in menuList" :key="item.id"  :class="{active:!item.checked,nochild: !item.childList}">
+                <dt @click="changeMenu(item)" v-if="item.childList">{{item.name}}<em></em></dt>
+                <dt @click="filterMenu(item.id)" v-if="!item.childList">{{item.name}}<em></em></dt>
+                <dd v-for="(litem) in item.childList" :key="litem.id" @click="filterMenu(litem.id)" :class="{active : litem.id ===menuFilter.categoryId}">{{litem.name}}</dd>
+              </dl>
+            </div>
         </div>
         <div class="ct">
-            <div class="shopcart" @click="shopCartShow=true"></div>
+            <div class="shopcart" @click="shopCartShow=true"><Badge :count="shopCartNum"></Badge></div>
             <div class="search">
                 <input type="text" placeholder="搜索" v-model="menuFilter.searchKey" @keyup.enter="filterSearch"/>
             </div>
             <div class="bd">
                  <Scroll :on-reach-bottom="handleReachBottom" :distance-to-edge='distance' :height="scrollHeight" v-if="shopList.length>0">
-                    <dl class="card" v-for="item in shopList" :key="item.id" @click="selectShop(item)">
+                    <dl class="card" v-for="item in shopList" @click="selectShop(item)" :key="item.id" > 
                         <dt><img :src="item.primaryPicUrl" /></dt>
                         <dd>{{item.goodsName}}</dd>
-                        <dd class="price">￥{{item.salePrice.toFixed(1)}}</dd>
+                        <dd class="price">￥{{item.salePrice.toFixed(2)}}</dd>
                     </dl>
                  </Scroll>
             </div>
         </div>
         <!-- 商品配置弹窗 -->
-          <Modal v-model="showShopCard" class="xz-model">
-              <SpecCard v-model="specCardData"></SpecCard>
+          <Modal v-model="showShopCard" class="xz-model" :mask-closable="false">
+              <SpecCard :value="specCardData" v-if="specCardData" ref="specCard"></SpecCard>
               <div slot="footer">
-                  <Button size="large" type="primary" long >确认</Button>
+                  <Button size="large" type="primary" long @click="addToCart">确认</Button>
               </div>
           </Modal>
           <!-- 订单详情配置 -->
-          <Modal v-model="showOrdermodel" class="xz-model bl-header">
+          <Modal v-model="showOrdermodel" class="xz-model bl-header" :mask-closable="false">
                <p slot="header" class="o-dhead">
                   <span class="l-icon"></span>
                   <span>奶茶小店 <em>（西直门凯德MAL店）</em></span>
               </p>
-              <OrderDetail></OrderDetail>
+              <OrderDetail @addUser="addUserModel=true" ref="orderDetail"></OrderDetail>
               <div slot="footer">
                   <Button size="large" type="primary" long @click="toOrderConfirm">确认</Button>
               </div>
           </Modal>
           <!-- 订单确认页面 -->
-          <Modal v-model="showConfirmModel" class="xz-model" :closable="false">
-              <ConfirmOrder></ConfirmOrder>
+          <Modal v-model="showConfirmModel" class="xz-model" :closable="false" :mask-closable="false">
+              <ConfirmOrder :orderData="orderData" v-if="orderData" ></ConfirmOrder>
               <div slot="footer" class="btw-footer">
-                  <Button size="large" type="ghost">取消订单</Button>
+                  <Button size="large" type="ghost" @click="cancelOrder">取消订单</Button>
                   <Button size="large" type="primary" @click="SubOrderConfirm">确认结账</Button>
               </div>
           </Modal>
           <!-- 订单详情配置 -->
-          <Modal v-model="showPayType" class="xz-model bl-header">
+          <Modal v-model="showPayType" class="xz-model bl-header" :mask-closable="false">
                <p slot="header" class="o-dhead">
                   选择支付方式
               </p>
@@ -61,20 +64,20 @@
               <div slot="footer"></div>
           </Modal>
           <!-- 支付成功 -->
-          <Modal v-model="showPayResult" class="xz-model">
-              <PaySuc></PaySuc>
+          <Modal v-model="showPayResult" class="xz-model" :mask-closable="false"> 
+              <PaySuc :payType="payType" v-if="payType" ></PaySuc>
               <div slot="footer">
-                <Button size="large" type="primary" long >确认并打印小票</Button>
+                <Button size="large" type="primary" long @click="print">确认并打印小票</Button>
               </div>
           </Modal>
           <!-- 新增用户 -->
-          <Modal v-model="addUserModel" class="xz-model bl-header">
+          <Modal v-model="addUserModel" class="xz-model bl-header" :mask-closable="false">
                <p slot="header" class="o-dhead">
                   新增/修改会员
               </p>
-              <AddUser></AddUser>
+              <AddUser @success="editSuc"></AddUser>
               <div slot="footer">
-                <Button size="large" type="primary" long >保存</Button>
+                <!-- <Button size="large" type="primary" long >保存</Button> -->
               </div>
           </Modal>
     </div>
@@ -82,6 +85,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from "vuex";
 import SpecCard from "./specCard"; //商品配置弹窗
 import ShopCart from "./shopcart"; //购物车
 import OrderDetail from "./orderDetail"; //订单详情配置
@@ -115,25 +119,19 @@ export default {
         page_num: 1,
         categoryId: null,
         searchKey: "",
-        page_size: 15
+        page_size: 20
       },
       //查询条件end
       isEnd: false,
       menuList: [], //菜单数据
       shopList: [], //商品数据
-      specCardData: {
-        shopTitle: "01-招牌奶茶",
-        num: 1,
-        remark: [
-          { name: "冰", id: 1 },
-          { name: "冰", id: 2 },
-          { name: "冰", id: 3 }
-        ],
-        imgUrl: "http://placeholder.qiniudn.com/270x270"
-      }
+      specCardData: null, //商品卡片数据
+      orderData: null, //订单数据
+      payType: null //订单数据
     };
   },
   methods: {
+    ...mapActions("app", ["clearAll", "initShopCartAction"]),
     changeMenu(item) {
       if (item.checked) {
         item.checked = !item.checked;
@@ -142,14 +140,18 @@ export default {
       }
     },
     handleReachBottom() {
-      const _this=this;
-      if(_this.isEnd){
-         _this.$Message.warning('已没有更多的内容了！');
-      }else{
-        _this.menuFilter=_this.menuFilter+1;
+      //下拉
+      const _this = this;
+      if (_this.isEnd) {
+        _this.$Message.warning("已没有更多的内容了！");
+      } else {
+        _this.menuFilter.page_num = _this.menuFilter.page_num + 1;
+        return _this.queryList();
       }
     },
-    selectShop() {
+    selectShop(item) {
+      const _this = this;
+      _this.specCardData = JSON.parse(JSON.stringify(item));
       this.showShopCard = true;
     },
     cartBalance() {
@@ -157,20 +159,95 @@ export default {
       this.showOrdermodel = true;
     },
     toOrderConfirm() {
-      this.showOrdermodel = false;
-      this.showConfirmModel = true;
+      //提交订单
+      const _this = this;
+      this.$refs.orderDetail.submit().then(function(data) {
+        _this.orderData = data.object;
+        _this.$refs.orderDetail.phone = "";
+        _this.$refs.orderDetail.des = "";
+        _this.clearAll();
+        _this.showOrdermodel = false;
+        _this.showConfirmModel = true;
+      });
     },
     SubOrderConfirm() {
+      //确认结账
       this.showConfirmModel = false;
       this.showPayType = true;
     },
-    selectPayType() {
-      this.showPayType = false;
-      this.showPayResult = true;
+    cancelOrder() {
+      const _this = this;
+      _this.$Spin.show();
+      _this.$http
+        .post("/api/users/orderinfo/cancel", {
+          orderId: _this.orderData.orderInfo.orderId
+        })
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.showConfirmModel = false;
+            _this.orderData = false;
+            _this.$Message.success("订单已取消！");
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+    },
+    selectPayType(type) {
+      //选择支付方式
+      const _this = this;
+      _this.payType = type;
+      _this.$Spin.show();
+      _this.$http
+        .post("/api/users/payment/invoke", {
+          orderNumber: _this.orderData.orderInfo.orderNumber,
+          payStatus: _this.payType
+        })
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            _this.showPayType = false;
+            _this.showPayResult = true;
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
+    },
+    print() {
+      this.$Spin.show({
+        render: h => {
+          return h("div", [
+            h("Icon", {
+              class: "demo-spin-icon-load",
+              props: {
+                type: "load-c",
+                size: 18
+              }
+            }),
+            h("div", "打印中...")
+          ]);
+        }
+      });
+      setTimeout(() => {
+        this.$Message.error("连接打印机失败！");
+        this.$Spin.hide();
+      }, 2000);
     },
     filterMenu(id) {
       const _this = this;
-      //_this.menuFilter.categoryId = id;
+      _this.menuFilter.categoryId = id;
       _this.menuFilter.page_num = 1;
       _this.menuFilter.searchKey = "";
       _this.isEnd = false;
@@ -181,6 +258,17 @@ export default {
       _this.menuFilter.page_num = 1;
       _this.isEnd = false;
       _this.queryList(true);
+    },
+    addToCart() {
+      //添加到购物车
+      const specCard = this.$refs.specCard;
+      specCard.addProductToCart(specCard.value);
+      this.showShopCard = false;
+    },
+    editSuc(options) {
+      const _this = this;
+      _this.$refs.orderDetail.phone = options.phone;
+      _this.addUserModel = false;
     },
     queryList(isFirst) {
       //商品列表查询
@@ -193,13 +281,16 @@ export default {
             const result = res.data;
             if (result.code === "200") {
               _this.$Spin.hide();
-              if (result.object.totalPage == result.object.currentPage) {
+              if (
+                result.object.totalPage == result.object.currentPage ||
+                result.object.totalPage == _this.menuFilter.page_num
+              ) {
                 _this.isEnd = true;
               }
               if (isFirst) {
                 _this.shopList = result.object.object;
               } else {
-                _this.shopList.push(result.object.object);
+                _this.shopList.push(...result.object.object);
               }
             } else {
               _this.$Spin.hide();
@@ -237,11 +328,16 @@ export default {
     }
   },
   mounted() {
-    const _this=this;
-    this.queryMenu();
-    window.setTimeout(function(){
-      _this.queryList(true)
-    },1000);
+    const _this = this;
+    _this.menuFilter.page_size =
+      Math.floor(document.getElementsByClassName("ct")[0].offsetWidth / 298) *
+      4;
+    _this.initShopCartAction();
+    _this.queryMenu();
+    _this.queryList(true);
+  },
+  computed: {
+    ...mapGetters("app", ["shopCartNum"])
   }
 };
 </script>
@@ -256,8 +352,8 @@ export default {
   color: #058fff;
 }
 .xz-model .ivu-btn-large {
-  padding: 12px 15px 12px;
-  font-size: 16px;
+  padding: 8px 15px 8px;
+  font-size: 14px;
 }
 .ivu-tooltip-inner {
   color: #333;
@@ -282,16 +378,16 @@ export default {
   color: #fff;
 }
 .o-dhead {
-  font-size: 20px !important;
+  font-size: 16px !important;
   color: #fff !important;
-  line-height: 40px !important;
-  height: 40px !important;
+  line-height: 25px !important;
+  height: 25px !important;
 }
 .o-dhead em {
   font-size: 16px;
 }
 .bl-header .ivu-modal-close {
-  top: 18px;
+  top: 11px;
 }
 .o-dhead .l-icon {
   width: 30px;
@@ -304,5 +400,8 @@ export default {
 .btw-footer {
   display: flex;
   justify-content: space-between;
+}
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
 }
 </style>

@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 
 import app from './modules/app';
 import user from './modules/user';
-console.log(app);
 Vue.use(Vuex);
 
 const store = new Vuex.Store({

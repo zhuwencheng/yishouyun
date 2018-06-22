@@ -10,7 +10,7 @@
                 <label>
                     收银员：
                 </label>
-                <input type="text" v-model="userName"/>
+                {{userName}}
             </div>
             <div class="submit"  @click="handleSubmit">
                 <span class="btn">退出</span>
@@ -26,17 +26,33 @@ export default {
   components: {},
   data() {
     return {
-      userName: ""
+      userName: sessionStorage.token
     };
   },
   methods: {
     handleSubmit() {
       const _this = this;
       _this.$Spin.show();
-      setTimeout(() => {
-          this.$Spin.hide();
-        _this.$Message.success("成功提示！");
-      }, 1000);
+      _this.$http
+        .post("/api/users/logout")
+        .then(function(res) {
+          const result = res.data;
+          if (result.code === "200") {
+            _this.$Spin.hide();
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('mchName');
+            _this.$router.push({
+              name: "login"
+            });
+          } else {
+            _this.$Spin.hide();
+            _this.$Message.error(result.message);
+          }
+        })
+        .catch(function(error) {
+          _this.$Spin.hide();
+          _this.$Message.error("网络异常！");
+        });
     }
   },
   mounted() {}

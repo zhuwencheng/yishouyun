@@ -10,7 +10,7 @@
             <FormItem prop="phone" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
-                        门店手机号
+                        门店手机号：
                     </label>
                     <input type="text" v-model="form.phone" maxlength="11"/>
                 </div>
@@ -18,7 +18,7 @@
             <FormItem prop="code" class="reset-ivu-form-item">
                 <div class="xz-form-group">
                     <label>
-                        验证码
+                        验证码：
                     </label>
                     <input type="text" v-model="form.code" maxlength="6"/>
                     <CountDown class="sendcode"  @send="send" v-if="isVPhone"></CountDown>
@@ -50,7 +50,7 @@ export default {
           {
             required: true,
             message: "请填写正确格式的手机号",
-            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+            pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/,
             trigger: "blur"
           }
         ],
@@ -111,7 +111,7 @@ export default {
   },
   computed: {
     isVPhone() {
-      const reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      const reg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
       return reg.test(this.form.phone);
     }
   }

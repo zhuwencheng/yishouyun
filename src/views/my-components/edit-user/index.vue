@@ -72,7 +72,7 @@ export default {
           {
             required: true,
             message: "请填写正确格式的手机号",
-            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+            pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/,
             trigger: "blur"
           }
         ],
@@ -85,11 +85,11 @@ export default {
         ]
       },
       selectOptions: [
-        { label: "青铜", value: "0" },
-        { label: "白银", value: "1" },
-        { label: "黄金", value: "2" },
-        { label: "白金", value: "3" },
-        { label: "砖石", value: "4" }
+        { label: "普通", value: 0 },
+        { label: "黄金", value: 1 },
+        // { label: "黄金", value: "2" },
+        // { label: "白金", value: "3" },
+        // { label: "砖石", value: "4" }
       ]
     };
   },
@@ -116,9 +116,12 @@ export default {
         .then(function(res) {
           const result = res.data;
           if (result.code === "200") {
-            _this.$emit('success',false);
+            _this.$emit("success", {
+              type: false,
+              phone: _this.form.memberPhone
+            });
             _this.$Spin.hide();
-            _this.$Message.success('新增成功！');
+            _this.$Message.success("新增成功！");
           } else {
             _this.$Spin.hide();
             _this.$Message.error(result.message);
@@ -136,9 +139,12 @@ export default {
         .then(function(res) {
           const result = res.data;
           if (result.code === "200") {
-            _this.$Message.success('修改成功！');
+            _this.$Message.success("修改成功！");
             _this.$Spin.hide();
-            _this.$emit('success',true);
+            _this.$emit("success", {
+              type: true,
+              phone: _this.form.memberPhone
+            });
           } else {
             _this.$Spin.hide();
             _this.$Message.error(result.message);

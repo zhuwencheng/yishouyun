@@ -6,7 +6,7 @@
 <template>
     <div class="xz-input-number">
         <em :class="{up:true,disabled:!(value>1)}" @click="change(-1)" title="up">-</em>
-        <input type="text" @input="inputChage" :value="value"/>
+        <input type="text" @input="inputChage" :value="value" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/>
         <em class="down" @click="change(1)" title="down">+</em>
     </div>
 </template>

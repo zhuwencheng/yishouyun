@@ -32,4 +32,7 @@ html,body{
     width: 100%;
     height: 100%;
 }
+.ivu-spin-fix{
+    background-color: hsla(0,0%,100%,.1);
+}
 </style>

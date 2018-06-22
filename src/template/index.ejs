@@ -7,6 +7,16 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.css[0] %>">
     <link rel="stylesheet" name="theme" href="">
+    <script type="text/javascript">
+        var browser=navigator.appName;
+        var b_version=navigator.appVersion;
+        var version=b_version.split(";");
+        var trim_Version=version[1].replace(/[ ]/g,"");
+        if(browser=="Microsoft Internet Explorer" && (trim_Version=="MSIE7.0"||trim_Version=="MSIE6.0"||trim_Version=="MSIE8.0"))
+        {
+            alert("浏览器版本过低,建议升级到IE9以上版本浏览器")
+        }
+    </script>
 </head>
 
 <body>
